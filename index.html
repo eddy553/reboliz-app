@@ -61,7 +61,7 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-    <!-- ================= VISTA 1: FORMULARIO DE REGISTRO CON LOCALSTORAGE ================= -->
+    <!-- ================= VISTA 1: FORMULARIO DE REGISTRO ================= -->
     <div id="vista-registro" class="fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-2xl max-w-md w-full border-t-4 border-reboliz-500 space-y-5">
             <div class="text-center space-y-2">
@@ -83,16 +83,16 @@
                 </div>
                 <button type="submit" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs py-3.5 rounded-xl shadow-lg transition mt-2 flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-user-plus"></i>
-                    <span data-i18n="reg_btn">Registrarme y Buscar Amigos</span>
+                    <span data-i18n="reg_btn">Registrarme y Entrar</span>
                 </button>
                 <p class="text-[10px] text-slate-500 text-center leading-relaxed" data-i18n="reg_note">
-                    🔒 Sesión protegida y guardada localmente en tu dispositivo.
+                    🔒 Puedes desvincular tu cuenta o cambiar de perfil cuando quieras.
                 </p>
             </form>
         </div>
     </div>
 
-    <!-- ================= VISTA 2: APLICACIÓN PRINCIPAL AMPLIADA ================= -->
+    <!-- ================= VISTA 2: APLICACIÓN PRINCIPAL ================= -->
     <div id="vista-app" class="hidden flex-1 flex flex-col h-full overflow-hidden">
         <!-- Top Navigation Bar -->
         <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-14 flex items-center justify-between px-4 shrink-0 z-40 shadow-sm">
@@ -125,7 +125,6 @@
             
             <!-- ================= TAB 1: FEED SOCIAL ================= -->
             <div id="tab-feed" class="tab-content active max-w-xl mx-auto p-3 space-y-4">
-                <!-- Crear Publicación -->
                 <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-4 border border-slate-100 dark:border-slate-700 space-y-3">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-full bg-reboliz-500 text-white flex items-center justify-center font-bold text-sm shadow">
@@ -146,14 +145,11 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Lista de Publicaciones -->
                 <div id="posts-container" class="space-y-4"></div>
             </div>
 
-            <!-- ================= TAB 2: BUSCADOR DE AMIGOS Y DIRECTORIO ================= -->
+            <!-- ================= TAB 2: BUSCADOR DE AMIGOS ================= -->
             <div id="tab-friends" class="tab-content max-w-xl mx-auto p-3 space-y-4">
-                <!-- Buscador de Amigos -->
                 <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm space-y-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white flex items-center space-x-2">
                         <i class="fa-solid fa-users text-reboliz-500"></i>
@@ -161,11 +157,9 @@
                     </h3>
                     <div class="relative">
                         <i class="fa-solid fa-search absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-                        <input type="text" id="friend-search-input" oninput="filterFriends()" data-i18n-placeholder="search_friends_placeholder" placeholder="Buscar por nombre, ciudad (Bella Unión, Porto Alegre)..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 pl-10 pr-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100">
+                        <input type="text" id="friend-search-input" oninput="filterFriends()" data-i18n-placeholder="search_friends_placeholder" placeholder="Buscar por nombre, ciudad..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 pl-10 pr-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
-
-                <!-- Lista de Miembros / Amigos -->
                 <div id="friends-container" class="space-y-3"></div>
             </div>
 
@@ -179,7 +173,6 @@
                             <span id="map-toggle-text" data-i18n="map_view">Mapa</span>
                         </button>
                     </div>
-                    <!-- Map Container -->
                     <div id="map-wrapper" class="hidden h-60 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 relative z-10 shadow-inner">
                         <div id="leaflet-map" class="w-full h-full"></div>
                     </div>
@@ -194,7 +187,7 @@
                         <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs" id="chat-avatar-box">CS</div>
                         <div>
                             <h4 id="active-chat-name" class="font-bold text-xs text-slate-900 dark:text-white">Carlos Silva</h4>
-                            <span class="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">🟢 En línea • Chat interno seguro</span>
+                            <span class="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">🟢 En línea • Chat seguro</span>
                         </div>
                     </div>
                     <select id="contact-selector" onchange="switchChatContact(this.value)" class="bg-slate-200 dark:bg-slate-600 text-[10px] font-semibold py-1 px-2 rounded-lg border-0 text-slate-800 dark:text-slate-100">
@@ -212,39 +205,42 @@
                 </div>
             </div>
 
-            <!-- ================= TAB 5: FINANZAS & MERCADO PAGO ================= -->
-            <div id="tab-finance" class="tab-content max-w-xl mx-auto p-3 space-y-4">
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden space-y-4">
-                    <div class="absolute right-0 top-0 w-40 h-40 bg-reboliz-500/10 rounded-full blur-2xl"></div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-wallet text-reboliz-500 text-lg"></i>
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400" data-i18n="financial_panel">Panel Financiero Reboliz</span>
-                        </div>
-                        <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/30">🟢 API Activa</span>
+            <!-- ================= TAB 5: PERFIL & DESVINCULACIÓN DE CUENTA ================= -->
+            <div id="tab-profile" class="tab-content max-w-xl mx-auto p-3 space-y-4">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 text-center space-y-4">
+                    <div class="w-20 h-20 rounded-full bg-reboliz-500 text-white font-extrabold text-2xl flex items-center justify-center mx-auto shadow-md" id="profile-big-avatar">
+                        ER
+                    </div>
+                    <div>
+                        <h3 id="profile-username" class="font-bold text-lg text-slate-900 dark:text-white">Nombre de Usuario</h3>
+                        <p id="profile-useremail" class="text-xs text-slate-500 dark:text-slate-400">correo@gmail.com</p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white/10 backdrop-blur p-3.5 rounded-2xl border border-white/10">
-                            <span class="text-[10px] text-slate-300 block" data-i18n="admob_earnings">Ganancias AdMob (Mes)</span>
-                            <h3 class="text-xl font-extrabold text-emerald-400 mt-0.5">$1,482.50 USD</h3>
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-700 space-y-2.5">
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-2xl flex items-center justify-between text-xs">
+                            <span class="font-medium text-slate-600 dark:text-slate-300" data-i18n="account_status">Estado de cuenta</span>
+                            <span class="text-emerald-600 font-bold">Verificada con Gmail</span>
                         </div>
-                        <div class="bg-white/10 backdrop-blur p-3.5 rounded-2xl border border-white/10">
-                            <span class="text-[10px] text-slate-300 block" data-i18n="merchant_fees">Tarifas PIX / Comercios</span>
-                            <h3 class="text-xl font-extrabold text-cyan-400 mt-0.5">R$ 3,840.00</h3>
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-2xl flex items-center justify-between text-xs">
+                            <span class="font-medium text-slate-600 dark:text-slate-300" data-i18n="region_set">Región activa</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200">Río Grande do Sul / Artigas</span>
                         </div>
                     </div>
 
-                    <button onclick="payBoost()" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold py-3 rounded-xl shadow transition text-xs flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-lock"></i>
-                        <span data-i18n="pay_pix_card">Pagar Anuncio con Mercado Pago / PIX</span>
-                    </button>
+                    <!-- Botón clave para Desvincular Cuenta y Cerrar Sesión -->
+                    <div class="pt-3">
+                        <button onclick="desvincularCuenta()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow transition text-xs flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span data-i18n="logout_btn">Cerrar Sesión y Desvincular Cuenta</span>
+                        </button>
+                        <p class="text-[10px] text-slate-400 mt-2" data-i18n="logout_desc">Esto borrará tu sesión de este navegador y te permitirá registrarte con otro usuario.</p>
+                    </div>
                 </div>
             </div>
 
         </main>
 
-        <!-- Bottom Navigation Bar (5 Pestañas Ampliadas) -->
+        <!-- Bottom Navigation Bar (5 Pestañas incluyendo Perfil) -->
         <nav class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 h-16 flex items-center justify-around px-1 shrink-0 z-40 fixed bottom-0 left-0 right-0 max-w-xl mx-auto shadow-lg">
             <button onclick="switchTab('feed')" id="nav-btn-feed" class="flex flex-col items-center justify-center flex-1 py-1 text-reboliz-500 transition">
                 <i class="fa-solid fa-house text-base"></i>
@@ -263,9 +259,9 @@
                 <span class="absolute top-1 right-3.5 w-2 h-2 bg-reboliz-500 rounded-full"></span>
                 <span class="text-[9px] font-semibold mt-0.5" data-i18n="tab_chat">Chat</span>
             </button>
-            <button onclick="switchTab('finance')" id="nav-btn-finance" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition">
-                <i class="fa-solid fa-chart-pie text-base"></i>
-                <span class="text-[9px] font-semibold mt-0.5" data-i18n="tab_finance">Finanzas</span>
+            <button onclick="switchTab('profile')" id="nav-btn-profile" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-user-circle text-base"></i>
+                <span class="text-[9px] font-semibold mt-0.5" data-i18n="tab_profile">Perfil</span>
             </button>
         </nav>
     </div>
@@ -278,8 +274,8 @@
                 reg_desc: "Conecta con amigos, técnicos y emprendedores de la región.",
                 reg_name: "Nombre de Usuario o Apodo",
                 reg_email: "Correo electrónico (Gmail)",
-                reg_btn: "Registrarme y Buscar Amigos",
-                reg_note: "🔒 Sesión protegida y guardada localmente en tu dispositivo.",
+                reg_btn: "Registrarme y Entrar",
+                reg_note: "🔒 Puedes desvincular tu cuenta o cambiar de perfil cuando quieras.",
                 what_is_on_your_mind: "¿Qué estás pensando, emprendedor?",
                 publish: "Publicar",
                 cat_general: "🌐 General",
@@ -287,7 +283,7 @@
                 cat_poultry: "🐓 Avicultura & Genética",
                 cat_cycling: "🚴‍♂️ Ciclismo & Deportes",
                 find_friends_title: "Buscar Amigos y Colegas",
-                search_friends_placeholder: "Buscar por nombre, ciudad (Bella Unión, Porto Alegre)...",
+                search_friends_placeholder: "Buscar por nombre, ciudad...",
                 add_friend_btn: "Añadir Amigo",
                 friend_added: "¡Amigo agregado!",
                 search_classifieds: "Buscar en la región...",
@@ -296,11 +292,11 @@
                 tab_friends: "Amigos",
                 tab_market: "Mercado",
                 tab_chat: "Chat",
-                tab_finance: "Finanzas",
-                financial_panel: "Panel Financiero Reboliz",
-                admob_earnings: "Ganancias AdMob (Mes)",
-                merchant_fees: "Tarifas PIX / Comercios",
-                pay_pix_card: "Pagar Anuncio con Mercado Pago / PIX",
+                tab_profile: "Perfil",
+                account_status: "Estado de cuenta",
+                region_set: "Región activa",
+                logout_btn: "Cerrar Sesión y Desvincular Cuenta",
+                logout_desc: "Esto borrará tu sesión de este navegador y te permitirá registrarte con otro usuario.",
                 type_message: "Escribe un mensaje seguro..."
             },
             pt: {
@@ -308,8 +304,8 @@
                 reg_desc: "Conecte-se com amigos, técnicos e empreendedores da região.",
                 reg_name: "Nome de Usuário ou Apelido",
                 reg_email: "E-mail (Gmail)",
-                reg_btn: "Cadastrar e Buscar Amigos",
-                reg_note: "🔒 Sessão protegida e salva localmente no seu dispositivo.",
+                reg_btn: "Cadastrar e Entrar",
+                reg_note: "🔒 Você pode desvincular sua conta ou trocar de perfil quando quiser.",
                 what_is_on_your_mind: "No que você está pensando, empreendedor?",
                 publish: "Publicar",
                 cat_general: "🌐 Geral",
@@ -317,7 +313,7 @@
                 cat_poultry: "🐓 Avicultura & Genética",
                 cat_cycling: "🚴‍♂️ Ciclismo & Esportes",
                 find_friends_title: "Buscar Amigos e Colegas",
-                search_friends_placeholder: "Pesquisar por nome, cidade (Bella Unión, Porto Alegre)...",
+                search_friends_placeholder: "Pesquisar por nome, cidade...",
                 add_friend_btn: "Adicionar Amigo",
                 friend_added: "¡Amigo adicionado!",
                 search_classifieds: "Pesquisar na região...",
@@ -326,11 +322,11 @@
                 tab_friends: "Amigos",
                 tab_market: "Mercado",
                 tab_chat: "Chat",
-                tab_finance: "Finanças",
-                financial_panel: "Painel Financeiro Reboliz",
-                admob_earnings: "Ganhos AdMob (Mês)",
-                merchant_fees: "Taxas PIX / Comércios",
-                pay_pix_card: "Pagar Anúncio com Mercado Pago / PIX",
+                tab_profile: "Perfil",
+                account_status: "Status da conta",
+                region_set: "Região ativa",
+                logout_btn: "Sair e Desvincular Conta",
+                logout_desc: "Isso apagará sua sessão e permitirá cadastrar outro usuário.",
                 type_message: "Digite uma mensagem segura..."
             },
             en: {
@@ -338,8 +334,8 @@
                 reg_desc: "Connect with friends, technicians, and entrepreneurs in the region.",
                 reg_name: "Username or Nickname",
                 reg_email: "Email (Gmail)",
-                reg_btn: "Sign Up & Find Friends",
-                reg_note: "🔒 Session securely saved on your device.",
+                reg_btn: "Sign Up & Enter",
+                reg_note: "🔒 You can unlink your account or switch profiles whenever you want.",
                 what_is_on_your_mind: "What's on your mind, entrepreneur?",
                 publish: "Post",
                 cat_general: "🌐 General",
@@ -356,11 +352,11 @@
                 tab_friends: "Friends",
                 tab_market: "Market",
                 tab_chat: "Chat",
-                tab_finance: "Finance",
-                financial_panel: "Reboliz Financial Dashboard",
-                admob_earnings: "AdMob Earnings (Month)",
-                merchant_fees: "PIX / Merchant Fees",
-                pay_pix_card: "Pay Ad with Mercado Pago / PIX",
+                tab_profile: "Profile",
+                account_status: "Account Status",
+                region_set: "Active Region",
+                logout_btn: "Log Out & Unlink Account",
+                logout_desc: "This will clear your session and allow you to register with another user.",
                 type_message: "Type a secure message..."
             },
             fr: {
@@ -368,8 +364,8 @@
                 reg_desc: "Connectez-vous avec des amis et entrepreneurs.",
                 reg_name: "Nom d'utilisateur ou Surnom",
                 reg_email: "E-mail (Gmail)",
-                reg_btn: "S'inscrire et Trouver des Amis",
-                reg_note: "🔒 Session sécurisée sur votre appareil.",
+                reg_btn: "S'inscrire et Entrer",
+                reg_note: "🔒 Vous pouvez dissocier votre compte à tout moment.",
                 what_is_on_your_mind: "Qu'avez-vous en tête ?",
                 publish: "Publier",
                 cat_general: "🌐 Général",
@@ -386,11 +382,11 @@
                 tab_friends: "Amis",
                 tab_market: "Marché",
                 tab_chat: "Chat",
-                tab_finance: "Finance",
-                financial_panel: "Tableau Financier",
-                admob_earnings: "Gains AdMob",
-                merchant_fees: "Frais PIX",
-                pay_pix_card: "Payer avec Mercado Pago / PIX",
+                tab_profile: "Profil",
+                account_status: "Statut du compte",
+                region_set: "Région active",
+                logout_btn: "Se Déconnecter & Dissocier",
+                logout_desc: "Effacera votre session actuelle.",
                 type_message: "Écrivez un message..."
             },
             zh: {
@@ -398,8 +394,8 @@
                 reg_desc: "与地区内的朋友和创业者建立联系。",
                 reg_name: "用户名或昵称",
                 reg_email: "电子邮箱 (Gmail)",
-                reg_btn: "注册并查找好友",
-                reg_note: "🔒 会话已安全保存在您的设备上。",
+                reg_btn: "注册并进入",
+                reg_note: "🔒 您可以随时解除账户绑定或切换个人资料。",
                 what_is_on_your_mind: "创业者，你在想什么？",
                 publish: "发布",
                 cat_general: "🌐 通用",
@@ -416,11 +412,11 @@
                 tab_friends: "好友",
                 tab_market: "市场",
                 tab_chat: "聊天",
-                tab_finance: "财务",
-                financial_panel: "财务面板",
-                admob_earnings: "AdMob 收益",
-                merchant_fees: "PIX 费用",
-                pay_pix_card: "使用 Mercado Pago / PIX 支付",
+                tab_profile: "个人资料",
+                account_status: "账户状态",
+                region_set: "活动区域",
+                logout_btn: "退出登录并解除绑定",
+                logout_desc: "这清除您的会话并允许您使用其他用户注册。",
                 type_message: "输入消息..."
             }
         };
@@ -428,7 +424,6 @@
         let currentLang = 'es';
         let currentUser = null;
 
-        // Base de datos de amigos / miembros de la región
         let friendsList = [
             { id: 1, name: "Carlos Silva", role: "Técnico & Café Colonial", city: "Porto Alegre, RS", status: "online", added: true },
             { id: 2, name: "Ana Beatriz", role: "Artesanías & Turismo", city: "Gramado, RS", status: "online", added: true },
@@ -441,7 +436,7 @@
             const savedUser = localStorage.getItem('reboliz_user');
             if(savedUser) {
                 currentUser = JSON.parse(savedUser);
-                iniciarAppPrincipal(currentUser.nombre);
+                iniciarAppPrincipal(currentUser.nombre, currentUser.email);
             }
         };
 
@@ -455,22 +450,36 @@
             currentUser = { nombre, email };
             localStorage.setItem('reboliz_user', JSON.stringify(currentUser));
 
-            iniciarAppPrincipal(nombre);
+            iniciarAppPrincipal(nombre, email);
             showToast(`¡Bienvenido a Reboliz, ${nombre}!`);
         }
 
-        function iniciarAppPrincipal(nombre) {
+        function iniciarAppPrincipal(nombre, email) {
             document.getElementById('vista-registro').classList.add('hidden');
             document.getElementById('vista-app').classList.remove('hidden');
             
             const initials = nombre.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
             document.getElementById('avatar-initials').textContent = initials;
+            document.getElementById('profile-big-avatar').textContent = initials;
             document.getElementById('user-badge').textContent = `🟢 ${nombre}`;
+            document.getElementById('profile-username').textContent = nombre;
+            document.getElementById('profile-useremail').textContent = email;
 
             renderPosts();
             renderFriends();
             renderClassifieds();
             renderChat();
+        }
+
+        // FUNCIÓN DE DESVINCULACIÓN DE CUENTA / CIERRE DE SESIÓN
+        function desvincularCuenta() {
+            localStorage.removeItem('reboliz_user');
+            currentUser = null;
+            document.getElementById('vista-app').classList.add('hidden');
+            document.getElementById('vista-registro').classList.remove('hidden');
+            document.getElementById('reg-nombre').value = '';
+            document.getElementById('reg-email').value = '';
+            showToast("Cuenta desvinculada y sesión cerrada con éxito.");
         }
 
         function changeLanguage(lang) {
@@ -508,7 +517,7 @@
                 'friends': document.getElementById('nav-btn-friends'),
                 'market': document.getElementById('nav-btn-market'),
                 'chat': document.getElementById('nav-btn-chat'),
-                'finance': document.getElementById('nav-btn-finance')
+                'profile': document.getElementById('nav-btn-profile')
             };
 
             Object.keys(navButtons).forEach(key => {
@@ -531,7 +540,6 @@
             }
         }
 
-        /* ================= RENDERIZAR AMIGOS ================= */
         function renderFriends(filter = '') {
             const container = document.getElementById('friends-container');
             const filtered = friendsList.filter(f => 
@@ -570,8 +578,7 @@
         }
 
         function filterFriends() {
-            const val = document.getElementById('friend-search-input').value;
-            renderFriends(val);
+            renderFriends(document.getElementById('friend-search-input').value);
         }
 
         function addFriend(id) {
@@ -591,14 +598,12 @@
             renderChat();
         }
 
-        /* ================= FEED DINÁMICO ================= */
         let posts = [
             { id: 1, author: "Carlos Silva", time: "Porto Alegre", category: "🔧 Reparación & Electrónica", content: "¡Servicio técnico especializado en micro-soldadura disponible con cobro instantáneo vía PIX!", likes: 14, liked: false }
         ];
 
         function renderPosts() {
-            const container = document.getElementById('posts-container');
-            container.innerHTML = posts.map(p => `
+            document.getElementById('posts-container').innerHTML = posts.map(p => `
                 <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm space-y-2 border border-slate-100 dark:border-slate-700">
                     <div class="flex items-center space-x-2">
                         <div class="w-8 h-8 rounded-full bg-reboliz-500 text-white flex items-center justify-center font-bold text-xs">${p.author.substring(0,2).toUpperCase()}</div>
@@ -651,7 +656,6 @@
             showToast("¡Publicación creada con éxito!");
         }
 
-        /* ================= MARKETPLACE & MAPA ================= */
         let mapInitialized = false;
         let leafletMap = null;
         const classifieds = [
@@ -708,7 +712,6 @@
             renderClassifieds(document.getElementById('market-search').value);
         }
 
-        /* ================= CHAT ================= */
         let activeContact = "Carlos Silva";
         let chats = {
             "Carlos Silva": [{ sender: 'other', text: '¡Hola! ¿Disponible asesoría PIX?' }],
@@ -746,25 +749,6 @@
             chats[activeContact].push({ sender: 'user', text });
             input.value = '';
             renderChat();
-        }
-
-        async function payBoost() {
-            showToast("Generando pasarela de cobro segura...", "info");
-            try {
-                const response = await fetch('/api/crear-pago', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ plan: "Plan Estatal RS", precio: 29.90, usuario: currentUser ? currentUser.nombre : "Emprendedor" })
-                });
-                const data = await response.json();
-                if (data.init_point) {
-                    window.location.href = data.init_point;
-                } else {
-                    showToast("Simulación de pago iniciada correctamente.");
-                }
-            } catch (error) {
-                showToast("Conectado al servidor local de pagos.");
-            }
         }
     </script>
 </body>

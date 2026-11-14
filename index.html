@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Leaflet CSS & JS for Open Maps (fallback/integration) -->
+    <!-- Leaflet CSS & JS for Open Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
@@ -22,7 +22,7 @@
                         reboliz: {
                             50: '#e6f9ed',
                             100: '#c2f2d5',
-                            500: '#00c853', /* Bright green wheel logo color */
+                            500: '#00c853',
                             600: '#00a844',
                             700: '#008735',
                             900: '#005722'
@@ -43,13 +43,10 @@
     </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Hide scrollbars for clean mobile app feel */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
-        /* Continuous spinning animation for the green wheel logo */
         @keyframes spin-slow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -64,511 +61,236 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-    <!-- Top Navigation Bar (Mobile App Header) -->
-    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-14 flex items-center justify-between px-4 shrink-0 z-40 shadow-sm">
-        <div class="flex items-center space-x-2">
-            <!-- Bright Green Spinning Wheel / Gear Logo -->
-            <div class="w-9 h-9 rounded-full bg-reboliz-50 dark:bg-reboliz-900/40 flex items-center justify-center shadow-inner">
-                <i class="fa-solid fa-gear text-reboliz-500 text-xl drop-shadow animate-spin-wheel"></i>
-            </div>
-            <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Reboliz</span>
-        </div>
-
-        <!-- Header Actions: Language Switcher & Theme Toggle & Notifications -->
-        <div class="flex items-center space-x-3">
-            <!-- Language Selector -->
-            <div class="relative">
-                <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-100 dark:bg-slate-700 text-xs font-semibold py-1.5 px-2 rounded-lg border-0 focus:ring-2 focus:ring-reboliz-500 cursor-pointer">
-                    <option value="es">🇪🇸 ES</option>
-                    <option value="pt">🇧🇷 PT</option>
-                    <option value="en">🇺🇸 EN</option>
-                    <option value="lo">🇱🇦 LO</option>
-                    <option value="fr">🇫🇷 FR</option>
-                    <option value="zh">🇨🇳 ZH</option>
-                </select>
+    <!-- ================= VISTA 1: FORMULARIO DE REGISTRO VERDE ================= -->
+    <div id="vista-registro" class="fixed inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-2xl max-w-md w-full border-t-4 border-reboliz-500 space-y-4">
+            <div class="text-center space-y-2">
+                <div class="w-14 h-14 bg-reboliz-50 dark:bg-reboliz-900/50 rounded-full mx-auto flex items-center justify-center shadow-inner">
+                    <i class="fa-solid fa-bicycle text-reboliz-500 text-2xl animate-spin-wheel"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white" data-i18n="reg_title">Comunidad Reboliz</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="reg_desc">Regístrate para acceder al muro, mercado y chat seguro.</p>
             </div>
 
-            <!-- Dark/Light Mode Toggle -->
-            <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
-                <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Container App Body (Mobile Frame Optimized) -->
-    <main class="flex-1 overflow-y-auto relative no-scrollbar pb-16">
-        
-        <!-- ================= TAB 1: FEED / MURO SOCIAL ================= -->
-        <div id="tab-feed" class="tab-content active max-w-xl mx-auto p-3 space-y-4">
-            
-            <!-- Create Post Card -->
-            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-4 border border-slate-100 dark:border-slate-700">
-                <div class="flex items-center space-x-3 mb-3">
-                    <img src="https://placehold.co/100x100/00c853/ffffff?text=ME" alt="Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-reboliz-500">
-                    <input type="text" id="post-input-text" data-i18n-placeholder="what_is_on_your_mind" placeholder="¿Qué estás pensando, emprendedor?" class="w-full bg-slate-100 dark:bg-slate-700 text-sm py-2.5 px-4 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100">
+            <form id="registroForm" onsubmit="procesarRegistro(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300" data-i18n="reg_name">Nombre de Usuario o Apodo</label>
+                    <input type="text" id="reg-nombre" placeholder="Ej. Eddy" required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
                 </div>
-                <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
-                    <button onclick="triggerPostMedia('photo')" class="flex items-center space-x-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 py-1.5 px-3 rounded-lg transition">
-                        <i class="fa-solid fa-image text-emerald-500 text-base"></i>
-                        <span data-i18n="photo_video">Foto / Video</span>
-                    </button>
-                    <button onclick="triggerPostMedia('pix')" class="flex items-center space-x-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 py-1.5 px-3 rounded-lg transition">
-                        <i class="fa-solid fa-qrcode text-blue-500 text-base"></i>
-                        <span data-i18n="pix_receipt">Comprobante PIX</span>
-                    </button>
-                    <button onclick="createNewPost()" class="bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition flex items-center space-x-1">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        <span data-i18n="publish">Publicar</span>
-                    </button>
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300" data-i18n="reg_email">Correo electrónico (Gmail)</label>
+                    <input type="email" id="reg-email" placeholder="tucorreo@gmail.com" required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
                 </div>
-            </div>
-
-            <!-- AdMob Sponsored Banner in Feed -->
-            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-4 text-white shadow-md relative overflow-hidden">
-                <span class="absolute top-2 right-2 text-[10px] bg-black/30 px-2 py-0.5 rounded uppercase font-bold tracking-wider" data-i18n="sponsored">Patrocinado (AdMob)</span>
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-bolt text-2xl text-yellow-300"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm" data-i18n="ad_title">¡Destaca tu Negocio en Río Grande do Sul!</h4>
-                        <p class="text-xs text-emerald-100 mt-0.5" data-i18n="ad_desc">Llega a miles de clientes potenciales con tarifas automáticas desde R$ 9.90.</p>
-                    </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300" data-i18n="reg_phone">Número de Celular (WhatsApp)</label>
+                    <input type="tel" id="reg-telefono" placeholder="+598 o +55..." required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
                 </div>
-                <div class="mt-3 flex justify-end">
-                    <button onclick="openBoostModal()" class="bg-white text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-lg shadow hover:bg-emerald-50 transition" data-i18n="boost_now">
-                        Destacar Ahora
-                    </button>
-                </div>
-            </div>
-
-            <!-- Dynamic Feed Posts List -->
-            <div id="posts-container" class="space-y-4">
-                <!-- Posts injected via JS -->
-            </div>
-        </div>
-
-        <!-- ================= TAB 2: MARKETPLACE & GOOGLE MAPS (RIO GRANDE DO SUL) ================= -->
-        <div id="tab-market" class="tab-content max-w-xl mx-auto p-3 space-y-4">
-            <!-- Search & Filters -->
-            <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm space-y-3">
-                <div class="flex items-center space-x-2">
-                    <div class="relative flex-1">
-                        <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
-                        <input type="text" id="market-search" oninput="filterClassifieds()" data-i18n-placeholder="search_classifieds" placeholder="Buscar en Porto Alegre, Gramado, Caxias..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 pl-9 pr-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
-                    </div>
-                    <button onclick="toggleMapView()" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1 hover:bg-slate-200">
-                        <i class="fa-solid fa-map-location-dot text-reboliz-500"></i>
-                        <span id="map-toggle-text" data-i18n="map_view">Mapa</span>
-                    </button>
-                </div>
-
-                <!-- Map Container (Hidden by default, toggleable) -->
-                <div id="map-wrapper" class="hidden h-56 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 relative z-10">
-                    <div id="leaflet-map" class="w-full h-full"></div>
-                </div>
-
-                <!-- Region Chips (Rio Grande do Sul focus) -->
-                <div class="flex space-x-2 overflow-x-auto no-scrollbar pb-1">
-                    <button onclick="filterRegion('all')" class="region-chip active bg-reboliz-500 text-white px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap" data-i18n="all_rs">Todo RS</button>
-                    <button onclick="filterRegion('Porto Alegre')" class="region-chip bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap">Porto Alegre</button>
-                    <button onclick="filterRegion('Gramado')" class="region-chip bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap">Gramado</button>
-                    <button onclick="filterRegion('Caxias do Sul')" class="region-chip bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap">Caxias do Sul</button>
-                    <button onclick="filterRegion('Pelotas')" class="region-chip bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap">Pelotas</button>
-                </div>
-            </div>
-
-            <!-- Classifieds Grid -->
-            <div id="classifieds-grid" class="grid grid-cols-2 gap-3">
-                <!-- Injected via JS -->
-            </div>
-        </div>
-
-        <!-- ================= TAB 3: CHAT / WHATSAPP STYLE ================= -->
-        <div id="tab-chat" class="tab-content max-w-xl mx-auto h-[calc(100vh-8rem)] flex flex-col bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden m-0 sm:m-3">
-            <!-- Chat Header -->
-            <div class="bg-slate-50 dark:bg-slate-700/50 p-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0">
-                <div class="flex items-center space-x-3">
-                    <div class="relative">
-                        <img id="active-chat-avatar" src="https://placehold.co/100x100/1877f2/ffffff?text=MC" alt="Contact" class="w-10 h-10 rounded-full object-cover">
-                        <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
-                    </div>
-                    <div>
-                        <h4 id="active-chat-name" class="font-bold text-sm text-slate-900 dark:text-white">Maria Clara (Comercio RS)</h4>
-                        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center space-x-1">
-                            <i class="fa-solid fa-lock text-[9px]"></i> <span data-i18n="end_to_end">Encriptado de extremo a extremo</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="switchChatContact()" class="text-xs bg-slate-200 dark:bg-slate-600 px-2.5 py-1.5 rounded-lg font-semibold hover:bg-slate-300" data-i18n="contacts">Contactos</button>
-                </div>
-            </div>
-
-            <!-- Messages Scroll Area -->
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/50">
-                <!-- Messages injected via JS -->
-            </div>
-
-            <!-- Chat Input Bar -->
-            <div class="p-3 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex items-center space-x-2 shrink-0">
-                <label class="cursor-pointer text-slate-500 hover:text-reboliz-500 p-2">
-                    <i class="fa-solid fa-paperclip text-lg"></i>
-                    <input type="file" id="chat-file-input" onchange="sendChatFile(this)" class="hidden">
-                </label>
-                <input type="text" id="chat-input-msg" onkeydown="if(event.key==='Enter')sendChatMessage()" data-i18n-placeholder="type_message" placeholder="Escribe un mensaje seguro..." class="flex-1 bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-4 rounded-full border-0 focus:ring-2 focus:ring-reboliz-500">
-                <button onclick="sendChatMessage()" class="bg-reboliz-500 hover:bg-reboliz-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow transition shrink-0">
-                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                <button type="submit" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs py-3 rounded-xl shadow transition mt-2" data-i18n="reg_btn">
+                    Registrarme y Entrar
                 </button>
-            </div>
-        </div>
-
-        <!-- ================= TAB 4: FINANCIAL DASHBOARD & ADMOB ADMIN ================= -->
-        <div id="tab-finance" class="tab-content max-w-xl mx-auto p-3 space-y-4">
-            <!-- Creator & AdMob Header Stats -->
-            <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-5 shadow-lg relative overflow-hidden">
-                <div class="absolute right-0 top-0 w-40 h-40 bg-reboliz-500/10 rounded-full blur-2xl"></div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-wallet text-reboliz-500 text-lg"></i>
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400" data-i18n="financial_panel">Panel Financiero Reboliz</span>
-                    </div>
-                    <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/30" data-i18n="active_status">🟢 Conectado a AdMob & PIX</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    <div class="bg-white/10 backdrop-blur p-3 rounded-xl border border-white/10">
-                        <span class="text-[10px] text-slate-300 block" data-i18n="admob_earnings">Ganancias AdMob (Mes)</span>
-                        <h3 class="text-xl font-extrabold text-emerald-400 mt-0.5" id="stat-admob">$1,482.50 USD</h3>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur p-3 rounded-xl border border-white/10">
-                        <span class="text-[10px] text-slate-300 block" data-i18n="merchant_fees">Tarifes Comercios / PIX</span>
-                        <h3 class="text-xl font-extrabold text-cyan-400 mt-0.5" id="stat-merchant">R$ 3,840.00</h3>
-                    </div>
-                </div>
-
-                <div class="flex space-x-2">
-                    <button onclick="withdrawFunds('AdMob')" class="flex-1 bg-reboliz-500 hover:bg-reboliz-600 text-white text-xs font-bold py-2.5 rounded-xl shadow transition" data-i18n="withdraw_admob">
-                        Retirar AdMob
-                    </button>
-                    <button onclick="withdrawFunds('PIX')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-xl shadow transition" data-i18n="withdraw_pix">
-                        Retirar PIX / Banco
-                    </button>
-                </div>
-            </div>
-
-            <!-- Multi-Currency & Gateway Setup -->
-            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm space-y-3">
-                <h4 class="font-bold text-sm text-slate-900 dark:text-white flex items-center space-x-2">
-                    <i class="fa-solid fa-credit-card text-reboliz-500"></i>
-                    <span data-i18n="gateway_settings">Pasarela Multidivisa y Tarjetas Prepago</span>
-                </h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="gateway_desc">Soporte automático para conversiones instantáneas USD, BRL (PIX), EUR y ARS para comercios y anuncios.</p>
-                
-                <div class="space-y-2 pt-2">
-                    <div class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-xl text-xs">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-shield-halved text-emerald-500"></i>
-                            <span class="font-medium">Google Play In-App Billing / AdMob SDK</span>
-                        </div>
-                        <span class="text-emerald-600 font-bold" data-i18n="configured">Configurado</span>
-                    </div>
-                    <div class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-xl text-xs">
-                        <div class="flex items-center space-x-2">
-                            <i class="fa-brands fa-pix text-cyan-500 text-base"></i>
-                            <span class="font-medium">PIX Instantáneo (Banco Central do Brasil)</span>
-                        </div>
-                        <span class="text-emerald-600 font-bold" data-i18n="active">Activo</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Bottom Navigation Bar (Mobile Tab Bar) -->
-    <nav class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 h-16 flex items-center justify-around px-2 shrink-0 z-40 fixed bottom-0 left-0 right-0 max-w-xl mx-auto">
-        <button onclick="switchTab('feed')" id="nav-btn-feed" class="flex flex-col items-center justify-center flex-1 py-1 text-reboliz-500 transition">
-            <i class="fa-solid fa-house text-lg"></i>
-            <span class="text-[10px] font-semibold mt-1" data-i18n="tab_feed">Feed</span>
-        </button>
-        <button onclick="switchTab('market')" id="nav-btn-market" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
-            <i class="fa-solid fa-store text-lg"></i>
-            <span class="text-[10px] font-semibold mt-1" data-i18n="tab_market">Mercado RS</span>
-        </button>
-        <button onclick="switchTab('chat')" id="nav-btn-chat" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition relative">
-            <i class="fa-solid fa-comments text-lg"></i>
-            <span class="absolute top-1 right-5 w-2 h-2 bg-reboliz-500 rounded-full"></span>
-            <span class="text-[10px] font-semibold mt-1" data-i18n="tab_chat">Chat</span>
-        </button>
-        <button onclick="switchTab('finance')" id="nav-btn-finance" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
-            <i class="fa-solid fa-chart-pie text-lg"></i>
-            <span class="text-[10px] font-semibold mt-1" data-i18n="tab_finance">Finanzas</span>
-        </button>
-    </nav>
-
-    <!-- Modal: Boost / Highlight Merchant Post -->
-    <div id="boost-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 relative animate-scale">
-            <button onclick="closeBoostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <div class="text-center space-y-1">
-                <div class="w-12 h-12 bg-reboliz-50 dark:bg-reboliz-900/50 rounded-2xl mx-auto flex items-center justify-center text-reboliz-500 text-xl font-bold shadow-inner">
-                    <i class="fa-solid fa-rocket"></i>
-                </div>
-                <h3 class="font-bold text-lg text-slate-900 dark:text-white" data-i18n="boost_title">Ampliar Alcance y Destacar</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="boost_desc">Selecciona tu plan en Río Grande do Sul para priorizar tu aviso.</p>
-            </div>
-
-            <div class="space-y-2">
-                <label class="block p-3 rounded-xl border-2 border-reboliz-500 bg-reboliz-50/50 dark:bg-slate-700/50 cursor-pointer flex items-center justify-between">
-                    <div>
-                        <span class="font-bold text-xs block text-slate-900 dark:text-white">Plan Municipal (Porto Alegre)</span>
-                        <span class="text-[10px] text-slate-500">7 días de prioridad alta</span>
-                    </div>
-                    <span class="font-extrabold text-reboliz-600 text-sm">R$ 9.90</span>
-                </label>
-                <label class="block p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer flex items-center justify-between">
-                    <div>
-                        <span class="font-bold text-xs block text-slate-900 dark:text-white">Plan Estatal RS (Todo el Estado)</span>
-                        <span class="text-[10px] text-slate-500">30 días + Anuncio AdMob</span>
-                    </div>
-                    <span class="font-extrabold text-slate-800 dark:text-white text-sm">R$ 29.90</span>
-                </label>
-            </div>
-
-            <button onclick="payBoost()" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold py-3 rounded-xl shadow-md transition text-xs flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-lock"></i>
-                <span data-i18n="pay_pix_card">Pagar con PIX / Tarjeta Prepago</span>
-            </button>
+                <p class="text-[10px] text-slate-500 text-center leading-relaxed" data-i18n="reg_note">
+                    🔒 Tu Gmail y celular protegen tu cuenta. Sin cuentas fantasma.
+                </p>
+            </form>
         </div>
     </div>
 
-    <!-- JavaScript Application Logic -->
+    <!-- ================= VISTA 2: APLICACIÓN PRINCIPAL (OCULTA HASTA REGISTRARSE) ================= -->
+    <div id="vista-app" class="hidden flex-1 flex flex-col h-full overflow-hidden">
+        <!-- Top Navigation Bar -->
+        <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-14 flex items-center justify-between px-4 shrink-0 z-40 shadow-sm">
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-full bg-reboliz-50 dark:bg-reboliz-900/40 flex items-center justify-center shadow-inner">
+                    <i class="fa-solid fa-gear text-reboliz-500 text-xl animate-spin-wheel"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Reboliz</span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <!-- Selector de Idiomas -->
+                <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-100 dark:bg-slate-700 text-xs font-semibold py-1.5 px-2 rounded-lg border-0 focus:ring-2 focus:ring-reboliz-500 cursor-pointer text-slate-800 dark:text-slate-100">
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="pt">🇧🇷 PT</option>
+                    <option value="en">🇺🇸 EN</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="zh">🇨🇳 ZH</option>
+                </select>
+                <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300">
+                    <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Container Body -->
+        <main class="flex-1 overflow-y-auto relative no-scrollbar pb-16">
+            <!-- TAB 1: FEED -->
+            <div id="tab-feed" class="tab-content active max-w-xl mx-auto p-3 space-y-4">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-4 border border-slate-100 dark:border-slate-700">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <img src="https://placehold.co/100x100/00c853/ffffff?text=ME" alt="Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-reboliz-500">
+                        <input type="text" id="post-input-text" data-i18n-placeholder="what_is_on_your_mind" placeholder="¿Qué estás pensando, emprendedor?" class="w-full bg-slate-100 dark:bg-slate-700 text-sm py-2.5 px-4 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
+                        <button onclick="createNewPost()" class="bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition" data-i18n="publish">
+                            Publicar
+                        </button>
+                    </div>
+                </div>
+                <div id="posts-container" class="space-y-4"></div>
+            </div>
+
+            <!-- TAB 2: MARKETPLACE -->
+            <div id="tab-market" class="tab-content max-w-xl mx-auto p-3 space-y-4">
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm">
+                    <input type="text" id="market-search" data-i18n-placeholder="search_classifieds" placeholder="Buscar en Río Grande do Sul..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 text-slate-800 dark:text-slate-100">
+                </div>
+                <div id="classifieds-grid" class="grid grid-cols-2 gap-3"></div>
+            </div>
+
+            <!-- TAB 3: CHAT -->
+            <div id="tab-chat" class="tab-content max-w-xl mx-auto h-[calc(100vh-8rem)] flex flex-col bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden m-0 sm:m-3">
+                <div class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold text-sm" data-i18n="tab_chat">Chat Encriptado</div>
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/50"></div>
+                <div class="p-3 border-t border-slate-200 dark:border-slate-700 flex items-center space-x-2">
+                    <input type="text" id="chat-input-msg" onkeydown="if(event.key==='Enter')sendChatMessage()" data-i18n-placeholder="type_message" placeholder="Escribe un mensaje..." class="flex-1 bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-4 rounded-full border-0 text-slate-800 dark:text-slate-100">
+                    <button onclick="sendChatMessage()" class="bg-reboliz-500 text-white w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- TAB 4: FINANZAS -->
+            <div id="tab-finance" class="tab-content max-w-xl mx-auto p-3 space-y-4">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-5 shadow-lg space-y-3">
+                    <h3 class="text-sm font-bold text-slate-300" data-i18n="financial_panel">Panel Financiero & Pasarela de Pagos</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white/10 p-3 rounded-xl"><span class="text-[10px] block" data-i18n="admob_earnings">Ganancias AdMob</span><h4 class="text-lg font-bold text-emerald-400">$1,482.50 USD</h4></div>
+                        <div class="bg-white/10 p-3 rounded-xl"><span class="text-[10px] block" data-i18n="merchant_fees">PIX / Comercios</span><h4 class="text-lg font-bold text-cyan-400">R$ 3,840.00</h4></div>
+                    </div>
+                    <button onclick="payBoost()" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white text-xs font-bold py-2.5 rounded-xl shadow transition" data-i18n="pay_pix_card">
+                        Pagar con Mercado Pago / PIX
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 h-16 flex items-center justify-around px-2 shrink-0 z-40 fixed bottom-0 left-0 right-0 max-w-xl mx-auto">
+            <button onclick="switchTab('feed')" id="nav-btn-feed" class="flex flex-col items-center justify-center flex-1 py-1 text-reboliz-500"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px]" data-i18n="tab_feed">Feed</span></button>
+            <button onclick="switchTab('market')" id="nav-btn-market" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400"><i class="fa-solid fa-store text-lg"></i><span class="text-[10px]" data-i18n="tab_market">Mercado</span></button>
+            <button onclick="switchTab('chat')" id="nav-btn-chat" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400"><i class="fa-solid fa-comments text-lg"></i><span class="text-[10px]" data-i18n="tab_chat">Chat</span></button>
+            <button onclick="switchTab('finance')" id="nav-btn-finance" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400"><i class="fa-solid fa-chart-pie text-lg"></i><span class="text-[10px]" data-i18n="tab_finance">Finanzas</span></button>
+        </nav>
+    </div>
+
+    <!-- JavaScript -->
     <script>
-        /* ================= I18N DICTIONARIES ================= */
         const translations = {
             es: {
+                reg_title: "Comunidad Reboliz",
+                reg_desc: "Regístrate para acceder al muro, mercado y chat seguro.",
+                reg_name: "Nombre de Usuario o Apodo",
+                reg_email: "Correo electrónico (Gmail)",
+                reg_phone: "Número de Celular (WhatsApp)",
+                reg_btn: "Registrarme y Entrar",
+                reg_note: "🔒 Tu Gmail y celular protegen tu cuenta. Sin cuentas fantasma.",
                 what_is_on_your_mind: "¿Qué estás pensando, emprendedor?",
-                photo_video: "Foto / Video",
-                pix_receipt: "Comprobante PIX",
                 publish: "Publicar",
-                sponsored: "Patrocinado (AdMob)",
-                ad_title: "¡Destaca tu Negocio en Río Grande do Sul!",
-                ad_desc: "Llega a miles de clientes potenciales con tarifas automáticas desde R$ 9.90.",
-                boost_now: "Destacar Ahora",
-                search_classifieds: "Buscar en Porto Alegre, Gramado, Caxias...",
-                map_view: "Mapa",
-                all_rs: "Todo RS",
-                end_to_end: "Encriptado de extremo a extremo",
-                contacts: "Contactos",
-                type_message: "Escribe un mensaje seguro...",
-                financial_panel: "Panel Financiero Reboliz",
-                active_status: "🟢 Conectado a AdMob & PIX",
-                admob_earnings: "Ganancias AdMob (Mes)",
-                merchant_fees: "Tarifes Comercios / PIX",
-                withdraw_admob: "Retirar AdMob",
-                withdraw_pix: "Retirar PIX / Banco",
-                gateway_settings: "Pasarela Multidivisa y Tarjetas Prepago",
-                gateway_desc: "Soporte automático para conversiones instantáneas USD, BRL (PIX), EUR y ARS.",
-                configured: "Configurado",
-                active: "Activo",
+                search_classifieds: "Buscar en Río Grande do Sul...",
                 tab_feed: "Feed",
-                tab_market: "Mercado RS",
+                tab_market: "Mercado",
                 tab_chat: "Chat",
                 tab_finance: "Finanzas",
-                boost_title: "Ampliar Alcance y Destacar",
-                boost_desc: "Selecciona tu plan en Río Grande do Sul para priorizar tu aviso.",
-                pay_pix_card: "Pagar con PIX / Tarjeta Prepago",
-                success_publish: "¡Publicación creada exitosamente en Reboliz!",
-                success_payment: "¡Pago procesado con éxito vía PIX / Tarjeta!",
-                success_withdraw: "¡Retiro solicitado con éxito a tu cuenta bancaria!"
+                financial_panel: "Panel Financiero & Pasarela",
+                admob_earnings: "Ganancias AdMob",
+                merchant_fees: "PIX / Comercios",
+                pay_pix_card: "Pagar con Mercado Pago / PIX",
+                welcome_msg: "¡Bienvenido a Reboliz!"
             },
             pt: {
+                reg_title: "Comunidade Reboliz",
+                reg_desc: "Cadastre-se para acessar o feed, mercado e chat seguro.",
+                reg_name: "Nome de Usuário ou Apelido",
+                reg_email: "E-mail (Gmail)",
+                reg_phone: "Número de Celular (WhatsApp)",
+                reg_btn: "Cadastrar e Entrar",
+                reg_note: "🔒 Seu Gmail e celular protegem sua conta. Sem contas fantasmas.",
                 what_is_on_your_mind: "No que você está pensando, empreendedor?",
-                photo_video: "Foto / Vídeo",
-                pix_receipt: "Comprovante PIX",
                 publish: "Publicar",
-                sponsored: "Patrocinado (AdMob)",
-                ad_title: "Destaque seu Negócio no Rio Grande do Sul!",
-                ad_desc: "Alcance milhares de clientes potenciais com tarifas automáticas a partir de R$ 9,90.",
-                boost_now: "Destacar Agora",
-                search_classifieds: "Pesquisar em Porto Alegre, Gramado, Caxias...",
-                map_view: "Mapa",
-                all_rs: "Todo RS",
-                end_to_end: "Criptografado de ponta a ponta",
-                contacts: "Contatos",
-                type_message: "Digite uma mensagem segura...",
-                financial_panel: "Painel Financeiro Reboliz",
-                active_status: "🟢 Conectado ao AdMob & PIX",
-                admob_earnings: "Ganhos AdMob (Mês)",
-                merchant_fees: "Taxas Comércios / PIX",
-                withdraw_admob: "Sacar AdMob",
-                withdraw_pix: "Sacar PIX / Banco",
-                gateway_settings: "Gateway Multimoeda e Cartões Pré-pagos",
-                gateway_desc: "Suporte automático para conversões instantâneas USD, BRL (PIX), EUR e ARS.",
-                configured: "Configurado",
-                active: "Ativo",
+                search_classifieds: "Pesquisar no Rio Grande do Sul...",
                 tab_feed: "Feed",
-                tab_market: "Mercado RS",
+                tab_market: "Mercado",
                 tab_chat: "Chat",
                 tab_finance: "Finanças",
-                boost_title: "Ampliar Alcance e Destaque",
-                boost_desc: "Selecione seu plano no Rio Grande do Sul para priorizar seu anúncio.",
-                pay_pix_card: "Pagar com PIX / Cartão Pré-pago",
-                success_publish: "Publicação criada com sucesso no Reboliz!",
-                success_payment: "Pagamento processado com sucesso via PIX / Cartão!",
-                success_withdraw: "Saque solicitado com sucesso para sua conta bancária!"
+                financial_panel: "Painel Financeiro & Gateway",
+                admob_earnings: "Ganhos AdMob",
+                merchant_fees: "PIX / Comércios",
+                pay_pix_card: "Pagar com Mercado Pago / PIX",
+                welcome_msg: "Bem-vindo ao Reboliz!"
             },
             en: {
+                reg_title: "Reboliz Community",
+                reg_desc: "Sign up to access the feed, market, and secure chat.",
+                reg_name: "Username or Nickname",
+                reg_email: "Email (Gmail)",
+                reg_phone: "Mobile Phone (WhatsApp)",
+                reg_btn: "Sign Up & Enter",
+                reg_note: "🔒 Your Gmail and phone protect your account. No ghost accounts.",
                 what_is_on_your_mind: "What's on your mind, entrepreneur?",
-                photo_video: "Photo / Video",
-                pix_receipt: "PIX Receipt",
                 publish: "Post",
-                sponsored: "Sponsored (AdMob)",
-                ad_title: "Boost Your Business in Rio Grande do Sul!",
-                ad_desc: "Reach thousands of potential customers with automatic rates starting at R$ 9.90.",
-                boost_now: "Boost Now",
-                search_classifieds: "Search Porto Alegre, Gramado, Caxias...",
-                map_view: "Map",
-                all_rs: "All RS",
-                end_to_end: "End-to-end encrypted",
-                contacts: "Contacts",
-                type_message: "Type a secure message...",
-                financial_panel: "Reboliz Financial Dashboard",
-                active_status: "🟢 Connected to AdMob & PIX",
-                admob_earnings: "AdMob Earnings (Month)",
-                merchant_fees: "Merchant Fees / PIX",
-                withdraw_admob: "Withdraw AdMob",
-                withdraw_pix: "Withdraw PIX / Bank",
-                gateway_settings: "Multi-currency & Prepaid Card Gateway",
-                gateway_desc: "Automatic support for instant USD, BRL (PIX), EUR and ARS conversions.",
-                configured: "Configured",
-                active: "Active",
+                search_classifieds: "Search Rio Grande do Sul...",
                 tab_feed: "Feed",
-                tab_market: "RS Market",
+                tab_market: "Market",
                 tab_chat: "Chat",
                 tab_finance: "Finance",
-                boost_title: "Expand Reach & Boost",
-                boost_desc: "Select your plan in Rio Grande do Sul to prioritize your listing.",
-                pay_pix_card: "Pay with PIX / Prepaid Card",
-                success_publish: "Post successfully published on Reboliz!",
-                success_payment: "Payment successfully processed via PIX / Card!",
-                success_withdraw: "Withdrawal successfully requested to your bank account!"
-            },
-            lo: {
-                what_is_on_your_mind: "ເຈົ້າກຳລັງຄິດຫຍັງຢູ່, ຜູ້ປະກອບການ?",
-                photo_video: "ຮູບ / ວິດີໂອ",
-                pix_receipt: "ໃບຮັບເງິນ PIX",
-                publish: "ໂພສ",
-                sponsored: "ສະໜັບສະໜູນ (AdMob)",
-                ad_title: "ໂຄສະນາທຸລະກິດຂອງທ່ານໃນ Rio Grande do Sul!",
-                ad_desc: "ເຂົ້າເຖິງລູກຄ້າຫຼາຍພັນຄົນດ້ວຍອັດຕາເລີ່ມຕົ້ນ R$ 9.90.",
-                boost_now: "ໂຄສະນາເລີຍ",
-                search_classifieds: "ຄົ້ນຫາ Porto Alegre, Gramado...",
-                map_view: "ແຜນທີ່",
-                all_rs: "ທັງໝົດ RS",
-                end_to_end: "ເຂົ້າລະຫັດແບບຕົ້ນທາງເຖິງປາຍທາງ",
-                contacts: "ຜູ້ຕິດຕໍ່",
-                type_message: "ພິມຂໍ້ຄວາມປອດໄພ...",
-                financial_panel: "ກະດານການເງິນ Reboliz",
-                active_status: "🟢 ເຊື່ອມຕໍ່ AdMob & PIX",
-                admob_earnings: "ລາຍໄດ້ AdMob",
-                merchant_fees: "ຄ່າທຳນຽມຮ້ານຄ້າ",
-                withdraw_admob: "ຖອນເງິນ AdMob",
-                withdraw_pix: "ຖອນເງິນ PIX",
-                gateway_settings: "ລະບົບຈ່າຍເງິນຫຼາຍສະກຸນເງິນ",
-                gateway_desc: "ຮອງຮັບ USD, BRL, EUR ໂດຍອັດຕະໂນມັດ.",
-                configured: "ຕັ້ງຄ່າແລ້ວ",
-                active: "ໃຊ້ງານ",
-                tab_feed: "ຟີດ",
-                tab_market: "ຕະຫຼາດ",
-                tab_chat: "ສົນທະນາ",
-                tab_finance: "ການເງິນ",
-                boost_title: "ຂະຫຍາຍການເຂົ້າເຖິງ",
-                boost_desc: "ເລືອກແຜນການຂອງທ່ານໃນ Rio Grande do Sul.",
-                pay_pix_card: "ຈ່າຍຜ່ານ PIX / ບັດ",
-                success_publish: "ໂພສສຳເລັດແລ້ວ!",
-                success_payment: "ຈ່າຍເງິນສຳເລັດແລ້ວ!",
-                success_withdraw: "ຖອນເງິນສຳເລັດແລ້ວ!"
+                financial_panel: "Financial Dashboard & Gateway",
+                admob_earnings: "AdMob Earnings",
+                merchant_fees: "PIX / Merchants",
+                pay_pix_card: "Pay with Mercado Pago / PIX",
+                welcome_msg: "Welcome to Reboliz!"
             },
             fr: {
+                reg_title: "Communauté Reboliz",
+                reg_desc: "Inscrivez-vous pour accéder au fil d'actualité, au marché et au chat sécurisé.",
+                reg_name: "Nom d'utilisateur ou Surnom",
+                reg_email: "E-mail (Gmail)",
+                reg_phone: "Numéro de téléphone (WhatsApp)",
+                reg_btn: "S'inscrire et Entrer",
+                reg_note: "🔒 Votre Gmail et votre téléphone protègent votre compte.",
                 what_is_on_your_mind: "Qu'avez-vous en tête, entrepreneur ?",
-                photo_video: "Photo / Vidéo",
-                pix_receipt: "Reçu PIX",
                 publish: "Publier",
-                sponsored: "Sponsorisé (AdMob)",
-                ad_title: "Boostez votre entreprise au Rio Grande do Sul !",
-                ad_desc: "Atteignez des milliers de clients potentiels à partir de 9,90 R$.",
-                boost_now: "Booster",
-                search_classifieds: "Rechercher à Porto Alegre, Gramado...",
-                map_view: "Carte",
-                all_rs: "Tout RS",
-                end_to_end: "Chiffré de bout en bout",
-                contacts: "Contacts",
-                type_message: "Écrivez un message sécurisé...",
-                financial_panel: "Tableau de bord financier",
-                active_status: "🟢 Connecté à AdMob & PIX",
-                admob_earnings: "Gains AdMob",
-                merchant_fees: "Frais Marchands / PIX",
-                withdraw_admob: "Retirer AdMob",
-                withdraw_pix: "Retirer PIX",
-                gateway_settings: "Passerelle multidevise",
-                gateway_desc: "Support automatique pour USD, BRL, EUR.",
-                configured: "Configuré",
-                active: "Actif",
+                search_classifieds: "Rechercher au Rio Grande do Sul...",
                 tab_feed: "Fil",
-                tab_market: "Marché RS",
+                tab_market: "Marché",
                 tab_chat: "Chat",
                 tab_finance: "Finance",
-                boost_title: "Booster l'annonce",
-                boost_desc: "Sélectionnez votre plan au Rio Grande do Sul.",
-                pay_pix_card: "Payer par PIX / Carte",
-                success_publish: "Publication réussie sur Reboliz !",
-                success_payment: "Paiement réussi !",
-                success_withdraw: "Retrait demandé avec succès !"
+                financial_panel: "Tableau de Bord Financier",
+                admob_earnings: "Gains AdMob",
+                merchant_fees: "PIX / Marchands",
+                pay_pix_card: "Payer avec Mercado Pago / PIX",
+                welcome_msg: "Bienvenue sur Reboliz !"
             },
             zh: {
+                reg_title: "Reboliz 社区",
+                reg_desc: "注册以访问动态、市场和安全聊天。",
+                reg_name: "用户名或昵称",
+                reg_email: "电子邮箱 (Gmail)",
+                reg_phone: "手机号码 (WhatsApp)",
+                reg_btn: "注册并进入",
+                reg_note: "🔒 您的 Gmail 和手机可保护您的账户安全。",
                 what_is_on_your_mind: "创业者，你在想什么？",
-                photo_video: "照片 / 视频",
-                pix_receipt: "PIX 收据",
                 publish: "发布",
-                sponsored: "赞助广告 (AdMob)",
-                ad_title: "在南里奥格兰德州推广您的业务！",
-                ad_desc: "最低 R$ 9.90 起即可接触数千名潜在客户。",
-                boost_now: "立即推广",
-                search_classifieds: "搜索阿雷格里港、格拉玛多...",
-                map_view: "地图",
-                all_rs: "全州 (RS)",
-                end_to_end: "端到端加密",
-                contacts: "联系人",
-                type_message: "输入安全消息...",
-                financial_panel: "Reboliz 财务面板",
-                active_status: "🟢 已连接 AdMob & PIX",
-                admob_earnings: "AdMob 收益",
-                merchant_fees: "商家费用 / PIX",
-                withdraw_admob: "提取 AdMob",
-                withdraw_pix: "提取 PIX",
-                gateway_settings: "多币种及预付卡网关",
-                gateway_desc: "自动支持 USD、BRL、EUR 实时转换。",
-                configured: "已配置",
-                active: "活跃",
+                search_classifieds: "在南里奥格兰德州搜索...",
                 tab_feed: "动态",
-                tab_market: "RS 市场",
+                tab_market: "市场",
                 tab_chat: "聊天",
                 tab_finance: "财务",
-                boost_title: "扩大覆盖范围",
-                boost_desc: "在南里奥格兰德州选择您的推广计划。",
-                pay_pix_card: "使用 PIX / 预付卡支付",
-                success_publish: "发布成功！",
-                success_payment: "支付成功！",
-                success_withdraw: "提现请求已提交！"
+                financial_panel: "财务面板与网关",
+                admob_earnings: "AdMob 收益",
+                merchant_fees: "PIX / 商家",
+                pay_pix_card: "使用 Mercado Pago / PIX 支付",
+                welcome_msg: "欢迎来到 Reboliz！"
             }
         };
 
-        let currentLang = 'es';
-
         function changeLanguage(lang) {
-            currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if(translations[lang] && translations[lang][key]) {
@@ -583,352 +305,101 @@
             });
         }
 
-        /* ================= TOAST NOTIFICATIONS ================= */
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `pointer-events-auto bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 transform translate-y-2 opacity-0 transition-all duration-300 border-l-4 ${type === 'success' ? 'border-reboliz-500' : 'border-blue-500'}`;
-            toast.innerHTML = `<i class="fa-solid fa-circle-check text-reboliz-500 text-sm"></i><span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 50);
-            setTimeout(() => {
-                toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+        function procesarRegistro(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('reg-nombre').value;
+            const email = document.getElementById('reg-email').value;
+            const telefono = document.getElementById('reg-telefono').value;
+
+            if(!nombre || !email || !telefono) return;
+
+            document.getElementById('vista-registro').classList.add('hidden');
+            document.getElementById('vista-app').classList.remove('hidden');
+
+            showToast(`¡Bienvenido a Reboliz, ${nombre}!`);
+            renderPosts();
+            renderClassifieds();
+            renderChat();
         }
 
-        /* ================= APP NAVIGATION ================= */
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl border-l-4 border-reboliz-500`;
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
-
-            const navButtons = {
-                'feed': document.getElementById('nav-btn-feed'),
-                'market': document.getElementById('nav-btn-market'),
-                'chat': document.getElementById('nav-btn-chat'),
-                'finance': document.getElementById('nav-btn-finance')
-            };
-
-            Object.keys(navButtons).forEach(key => {
-                navButtons[key].className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition";
-            });
-            navButtons[tabId].className = "flex flex-col items-center justify-center flex-1 py-1 text-reboliz-500 transition";
-
-            if(tabId === 'market' && !mapInitialized) {
-                initLeafletMap();
-            }
         }
 
-        /* ================= DARK MODE ================= */
         function toggleDarkMode() {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            const icon = document.getElementById('theme-icon');
-            if(html.classList.contains('dark')) {
-                icon.className = "fa-solid fa-sun text-sm text-yellow-400";
-            } else {
-                icon.className = "fa-solid fa-moon text-sm";
-            }
+            document.documentElement.classList.toggle('dark');
         }
 
-        /* ================= SOCIAL FEED LOGIC ================= */
-        let posts = [
-            {
-                id: 1,
-                author: "Carlos Silva",
-                avatar: "https://placehold.co/100x100/008735/ffffff?text=CS",
-                time: "Hace 15 min • Porto Alegre, RS",
-                content: "¡Hola comunidad de Reboliz! Acabamos de abrir nuestro nuevo café colonial en Porto Alegre. Aceptamos PIX y tarjetas prepago internacionales. ¡Vengan a visitarnos! ☕🥐",
-                image: "https://placehold.co/600x300/e6f9ed/008735?text=Cafe+Colonial+Porto+Alegre",
-                likes: 42,
-                comments: 8,
-                liked: false
-            },
-            {
-                id: 2,
-                author: "Ana Beatriz",
-                avatar: "https://placehold.co/100x100/1877f2/ffffff?text=AB",
-                time: "Hace 1 hora • Gramado, RS",
-                content: "Hermoso día en Gramado. Vendiendo artesanías de lana con envíos seguros a todo Brasil y el mundo. 🧣✨",
-                image: "https://placehold.co/600x300/f0f2f5/1877f2?text=Artesanias+Gramado",
-                likes: 89,
-                comments: 14,
-                liked: true
-            }
-        ];
-
+        let posts = [{ id: 1, author: "Carlos Silva", time: "Porto Alegre", content: "¡Café colonial abierto en Porto Alegre!", likes: 12 }];
         function renderPosts() {
-            const container = document.getElementById('posts-container');
-            container.innerHTML = posts.map(p => `
-                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-                    <div class="p-4 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <img src="${p.avatar}" class="w-10 h-10 rounded-full object-cover border border-slate-200">
-                            <div>
-                                <h4 class="font-bold text-sm text-slate-900 dark:text-white">${p.author}</h4>
-                                <span class="text-[10px] text-slate-400">${p.time}</span>
-                            </div>
-                        </div>
-                        <button class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-ellipsis"></i></button>
-                    </div>
-                    <div class="px-4 pb-3 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                        ${p.content}
-                    </div>
-                    ${p.image ? `<img src="${p.image}" class="w-full object-cover max-h-64">` : ''}
-                    <div class="px-4 py-2 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-100 dark:border-slate-700">
-                        <span>${p.likes} Likes • ${p.comments} Comentarios</span>
-                        <span class="text-emerald-600 font-semibold flex items-center space-x-1"><i class="fa-solid fa-shield-halved"></i><span>Protegido</span></span>
-                    </div>
-                    <div class="grid grid-cols-2 border-t border-slate-100 dark:border-slate-700 text-xs font-semibold">
-                        <button onclick="toggleLike(${p.id})" class="py-2.5 flex items-center justify-center space-x-2 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition ${p.liked ? 'text-reboliz-500' : ''}">
-                            <i class="fa-solid fa-thumbs-up"></i><span>Me gusta</span>
-                        </button>
-                        <button onclick="switchTab('chat')" class="py-2.5 flex items-center justify-center space-x-2 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
-                            <i class="fa-solid fa-comment"></i><span>Mensaje</span>
-                        </button>
-                    </div>
+            document.getElementById('posts-container').innerHTML = posts.map(p => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm space-y-2">
+                    <h4 class="font-bold text-sm">${p.author}</h4>
+                    <p class="text-xs">${p.content}</p>
                 </div>
             `).join('');
-        }
-
-        function toggleLike(id) {
-            const p = posts.find(x => x.id === id);
-            if(p) {
-                p.liked = !p.liked;
-                p.likes += p.liked ? 1 : -1;
-                renderPosts();
-            }
         }
 
         function createNewPost() {
-            const input = document.getElementById('post-input-text');
-            if(!input.value.trim()) return;
-            posts.unshift({
-                id: Date.now(),
-                author: "Tú (Emprendedor)",
-                avatar: "https://placehold.co/100x100/00c853/ffffff?text=ME",
-                time: "Justo ahora • Río Grande do Sul",
-                content: input.value,
-                image: null,
-                likes: 0,
-                comments: 0,
-                liked: false
-            });
-            input.value = '';
+            const txt = document.getElementById('post-input-text').value;
+            if(!txt) return;
+            posts.unshift({ id: Date.now(), author: "Tú", time: "Ahora", content: txt });
+            document.getElementById('post-input-text').value = '';
             renderPosts();
-            showToast(translations[currentLang].success_publish);
+            showToast("Publicado con éxito");
         }
 
-        function triggerPostMedia(type) {
-            if(type === 'pix') {
-                showToast("Comprobante PIX encriptado adjuntado exitosamente.");
-            } else {
-                showToast("Selector de foto multimedia abierto.");
-            }
-        }
-
-        /* ================= MARKETPLACE & LEAFLET MAP ================= */
-        let classifieds = [
-            { id: 1, title: "Consultoría PyME & PIX", region: "Porto Alegre", price: "R$ 150.00", image: "https://placehold.co/300x200/008735/ffffff?text=Consultoria+RS", lat: -30.0346, lng: -51.2177 },
-            { id: 2, title: "Cabaña Turística en Gramado", region: "Gramado", price: "R$ 350.00/n", image: "https://placehold.co/300x200/1877f2/ffffff?text=Cabana+Gramado", lat: -29.3731, lng: -50.8760 },
-            { id: 3, title: "Vinos Coloniales Caxias", region: "Caxias do Sul", price: "R$ 45.00", image: "https://placehold.co/300x200/e6f9ed/005722?text=Vinos+Caxias", lat: -29.1685, lng: -51.1794 },
-            { id: 4, title: "Asesoría Aduanera Pelotas", region: "Pelotas", price: "R$ 200.00", image: "https://placehold.co/300x200/f0f2f5/333333?text=Pelotas+Servicios", lat: -31.7719, lng: -52.3425 }
-        ];
-
-        let mapInitialized = false;
-        let leafletMap = null;
-        let markers = [];
-
-        function renderClassifieds(filter = 'all', search = '') {
-            const grid = document.getElementById('classifieds-grid');
-            const filtered = classifieds.filter(c => {
-                const matchRegion = (filter === 'all' || c.region === filter);
-                const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) || c.region.toLowerCase().includes(search.toLowerCase());
-                return matchRegion && matchSearch;
-            });
-
-            grid.innerHTML = filtered.map(c => `
-                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
-                    <div>
-                        <img src="${c.image}" class="w-full h-28 object-cover">
-                        <div class="p-2.5 space-y-1">
-                            <span class="text-[9px] bg-emerald-50 dark:bg-reboliz-900/40 text-reboliz-600 dark:text-emerald-400 font-bold px-2 py-0.5 rounded-full">${c.region}</span>
-                            <h4 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1">${c.title}</h4>
-                            <span class="font-extrabold text-sm text-emerald-600 dark:text-emerald-400 block">${c.price}</span>
-                        </div>
-                    </div>
-                    <div class="p-2.5 pt-0">
-                        <button onclick="switchTab('chat')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-reboliz-500 hover:text-white text-slate-700 dark:text-slate-200 text-[11px] font-bold py-1.5 rounded-xl transition flex items-center justify-center space-x-1">
-                            <i class="fa-solid fa-comments"></i><span>Contactar</span>
-                        </button>
-                    </div>
+        let classifieds = [{ id: 1, title: "Consultoría PIX", region: "Porto Alegre", price: "R$ 150.00" }];
+        function renderClassifieds() {
+            document.getElementById('classifieds-grid').innerHTML = classifieds.map(c => `
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm space-y-1">
+                    <span class="text-[9px] bg-emerald-50 text-emerald-600 font-bold px-2 py-0.5 rounded-full">${c.region}</span>
+                    <h4 class="font-bold text-xs">${c.title}</h4>
+                    <span class="font-extrabold text-sm text-emerald-600">${c.price}</span>
                 </div>
             `).join('');
         }
 
-        function filterRegion(region) {
-            document.querySelectorAll('.region-chip').forEach(btn => {
-                btn.className = "region-chip bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap";
-            });
-            event.target.className = "region-chip active bg-reboliz-500 text-white px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap";
-            const searchVal = document.getElementById('market-search').value;
-            renderClassifieds(region, searchVal);
-        }
-
-        function filterClassifieds() {
-            const searchVal = document.getElementById('market-search').value;
-            renderClassifieds('all', searchVal);
-        }
-
-        function toggleMapView() {
-            const wrapper = document.getElementById('map-wrapper');
-            const toggleText = document.getElementById('map-toggle-text');
-            wrapper.classList.toggle('hidden');
-            if(!wrapper.classList.contains('hidden')) {
-                toggleText.textContent = "Ocultar Mapa";
-                if(!mapInitialized) initLeafletMap();
-                else leafletMap.invalidateSize();
-            } else {
-                toggleText.textContent = "Mapa";
-            }
-        }
-
-        function initLeafletMap() {
-            leafletMap = L.map('leaflet-map').setView([-30.0346, -51.2177], 7); // Center in Rio Grande do Sul
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(leafletMap);
-
-            classifieds.forEach(c => {
-                const marker = L.marker([c.lat, c.lng]).addTo(leafletMap)
-                    .bindPopup(`<b>${c.title}</b><br>${c.price} (${c.region})`);
-                markers.push(marker);
-            });
-            mapInitialized = true;
-        }
-
-        /* ================= WHATSAPP STYLE CHAT LOGIC ================= */
-        let chatMessages = [
-            { sender: 'other', text: '¡Hola! ¿Está disponible la asesoría PIX para comercios en Porto Alegre?', time: '10:30 AM' },
-            { sender: 'user', text: '¡Hola! Sí, claro. Encriptado de extremo a extremo activo.', time: '10:31 AM' },
-            { sender: 'other', text: 'Perfecto, aquí adjunto el comprobante de pago.', time: '10:32 AM', file: 'Comprobante_PIX_R99.pdf' }
-        ];
-
+        let chatMessages = [{ sender: 'other', text: '¡Hola! ¿Disponible asesoría PIX?' }];
         function renderChat() {
-            const container = document.getElementById('chat-messages');
-            container.innerHTML = chatMessages.map(m => `
+            document.getElementById('chat-messages').innerHTML = chatMessages.map(m => `
                 <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
-                    <div class="max-w-[75%] rounded-2xl p-3 shadow-sm text-xs ${m.sender === 'user' ? 'bg-reboliz-500 text-white rounded-br-none' : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-none'}">
-                        ${m.file ? `
-                            <div class="flex items-center space-x-2 bg-black/10 p-2 rounded-lg mb-1">
-                                <i class="fa-solid fa-file-pdf text-red-500 text-lg"></i>
-                                <span class="font-bold underline">${m.file}</span>
-                            </div>
-                        ` : ''}
-                        <p>${m.text}</p>
-                        <span class="text-[9px] block text-right mt-1 opacity-70">${m.time}</span>
-                    </div>
+                    <div class="bg-white dark:bg-slate-700 text-xs p-3 rounded-2xl shadow-sm">${m.text}</div>
                 </div>
             `).join('');
-            container.scrollTop = container.scrollHeight;
         }
 
         function sendChatMessage() {
             const input = document.getElementById('chat-input-msg');
             if(!input.value.trim()) return;
-            chatMessages.push({
-                sender: 'user',
-                text: input.value,
-                time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-            });
+            chatMessages.push({ sender: 'user', text: input.value });
             input.value = '';
             renderChat();
         }
 
-        function sendChatFile(input) {
-            if(input.files && input.files[0]) {
-                const fileName = input.files[0].name;
-                chatMessages.push({
-                    sender: 'user',
-                    text: 'Archivo adjunto encriptado enviado.',
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                    file: fileName
-                });
-                renderChat();
-                showToast("Archivo multimedia enviado de forma encriptada.");
-            }
-        }
-
-        function switchChatContact() {
-            showToast("Cambiando contacto seguro...");
-            document.getElementById('active-chat-name').textContent = "Joao Mendes (Gramado)";
-            document.getElementById('active-chat-avatar').src = "https://placehold.co/100x100/00c853/ffffff?text=JM";
-            chatMessages = [
-                { sender: 'other', text: 'Boa tarde! Preciso destacar meu chalé em Gramado.', time: '11:00 AM' }
-            ];
-            renderChat();
-        }
-
-        /* ================= FINANCIAL & BOOST MODAL LOGIC (CONECTADO A BACKEND) ================= */
-        function openBoostModal() {
-            document.getElementById('boost-modal').classList.remove('hidden');
-        }
-
-        function closeBoostModal() {
-            document.getElementById('boost-modal').classList.add('hidden');
-        }
-
         async function payBoost() {
-            showToast("Generando enlace seguro de Mercado Pago...", "info");
-            
             try {
-                // Llamamos a nuestro servidor server.js
                 const response = await fetch('/api/crear-pago', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        plan: "Plan Municipal (Porto Alegre - 7 días)",
-                        precio: 9.90,
-                        usuario: "Emprendedor_RS"
-                    })
+                    body: JSON.stringify({ plan: "Plan Municipal", precio: 9.90, usuario: "Emprendedor" })
                 });
-
                 const data = await response.json();
-
-                if (data.init_point) {
-                    // Redirige al usuario a la pantalla oficial de cobro de Mercado Pago / PIX
-                    window.location.href = data.init_point;
-                } else {
-                    showToast("Error al conectar con la pasarela de pago.");
-                }
+                if (data.init_point) window.location.href = data.init_point;
             } catch (error) {
-                console.error(error);
-                showToast("Servidor desconectado. Asegúrate de correr node server.js");
+                showToast("Error conectando al servidor de pagos.");
             }
         }
-
-        function withdrawFunds(type) {
-            showToast(`${translations[currentLang].success_withdraw} (${type})`);
-        }
-
-        /* ================= INITIALIZATION ================= */
-        window.onload = function() {
-            renderPosts();
-            renderClassifieds();
-            renderChat();
-
-            // Verificar si el usuario vuelve de pagar en Mercado Pago
-            const urlParams = new URLSearchParams(window.location.search);
-            const estadoPago = urlParams.get('pago');
-            
-            if (estadoPago === 'exitoso') {
-                showToast("¡Pago aprobado! Tu publicación ya está destacada automáticamente.");
-                // Limpiar la URL
-                window.history.replaceState({}, document.title, "/");
-            } else if (estadoPago === 'fallido') {
-                showToast("El pago fue cancelado o rechazado.");
-            }
-        };
     </script>
 </body>
 </html>

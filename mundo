@@ -1,1 +1,0 @@
-app.use('/mundo', express.static(path.join(__dirname, 'mundo')));

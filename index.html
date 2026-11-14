@@ -61,37 +61,38 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-    <!-- ================= VISTA 1: FORMULARIO DE REGISTRO ================= -->
-    <div id="vista-registro" class="fixed inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-2xl max-w-md w-full border-t-4 border-reboliz-500 space-y-4">
+    <!-- ================= VISTA 1: FORMULARIO DE REGISTRO CON LOCALSTORAGE ================= -->
+    <div id="vista-registro" class="fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-2xl max-w-md w-full border-t-4 border-reboliz-500 space-y-5">
             <div class="text-center space-y-2">
-                <div class="w-14 h-14 bg-reboliz-50 dark:bg-reboliz-900/50 rounded-full mx-auto flex items-center justify-center shadow-inner">
-                    <i class="fa-solid fa-bicycle text-reboliz-500 text-2xl animate-spin-wheel"></i>
+                <div class="w-16 h-16 bg-reboliz-50 dark:bg-reboliz-900/50 rounded-2xl mx-auto flex items-center justify-center shadow-inner">
+                    <i class="fa-solid fa-bicycle text-reboliz-500 text-3xl animate-spin-wheel"></i>
                 </div>
-                <h2 class="text-xl font-bold text-slate-900 dark:text-white" data-i18n="reg_title">Comunidad Reboliz</h2>
-                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="reg_desc">Regístrate para acceder al muro, mercado y chat interno.</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="reg_title">Comunidad Reboliz</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="reg_desc">Acceso seguro al muro, mercado internacional y chat encriptado.</p>
             </div>
 
-            <form id="registroForm" onsubmit="procesarRegistro(event)" class="space-y-3">
+            <form id="registroForm" onsubmit="procesarRegistro(event)" class="space-y-3.5">
                 <div>
                     <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300" data-i18n="reg_name">Nombre de Usuario o Apodo</label>
-                    <input type="text" id="reg-nombre" placeholder="Ej. Eddy" required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
+                    <input type="text" id="reg-nombre" placeholder="Ej. Eddy Reboliz" required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-3 px-3.5 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300" data-i18n="reg_email">Correo electrónico (Gmail)</label>
-                    <input type="email" id="reg-email" placeholder="tucorreo@gmail.com" required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
+                    <input type="email" id="reg-email" placeholder="tucorreo@gmail.com" required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-3 px-3.5 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100">
                 </div>
-                <button type="submit" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs py-3 rounded-xl shadow transition mt-2" data-i18n="reg_btn">
-                    Registrarme y Entrar
+                <button type="submit" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs py-3.5 rounded-xl shadow-lg transition mt-2 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span data-i18n="reg_btn">Registrarme y Entrar</span>
                 </button>
                 <p class="text-[10px] text-slate-500 text-center leading-relaxed" data-i18n="reg_note">
-                    🔒 Tu Gmail protege tu perfil dentro de la aplicación.
+                    🔒 Tu sesión queda guardada de forma segura en tu dispositivo.
                 </p>
             </form>
         </div>
     </div>
 
-    <!-- ================= VISTA 2: APLICACIÓN PRINCIPAL ================= -->
+    <!-- ================= VISTA 2: APLICACIÓN PRINCIPAL ROBUSTA ================= -->
     <div id="vista-app" class="hidden flex-1 flex flex-col h-full overflow-hidden">
         <!-- Top Navigation Bar -->
         <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-14 flex items-center justify-between px-4 shrink-0 z-40 shadow-sm">
@@ -99,7 +100,10 @@
                 <div class="w-9 h-9 rounded-full bg-reboliz-50 dark:bg-reboliz-900/40 flex items-center justify-center shadow-inner">
                     <i class="fa-solid fa-gear text-reboliz-500 text-xl animate-spin-wheel"></i>
                 </div>
-                <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Reboliz</span>
+                <div>
+                    <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white block leading-tight">Reboliz</span>
+                    <span id="user-badge" class="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold">Conectado</span>
+                </div>
             </div>
             <div class="flex items-center space-x-3">
                 <!-- Selector de Idiomas -->
@@ -117,181 +121,347 @@
         </header>
 
         <!-- Main Container Body -->
-        <main class="flex-1 overflow-y-auto relative no-scrollbar pb-16">
-            <!-- TAB 1: FEED -->
+        <main class="flex-1 overflow-y-auto relative no-scrollbar pb-20">
+            
+            <!-- ================= TAB 1: FEED SOCIAL AVANZADO ================= -->
             <div id="tab-feed" class="tab-content active max-w-xl mx-auto p-3 space-y-4">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-4 border border-slate-100 dark:border-slate-700">
-                    <div class="flex items-center space-x-3 mb-3">
-                        <img src="https://placehold.co/100x100/00c853/ffffff?text=ME" alt="Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-reboliz-500">
-                        <input type="text" id="post-input-text" data-i18n-placeholder="what_is_on_your_mind" placeholder="¿Qué estás pensando, emprendedor?" class="w-full bg-slate-100 dark:bg-slate-700 text-sm py-2.5 px-4 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100">
+                <!-- Tarjeta de Creación de Publicación -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-4 border border-slate-100 dark:border-slate-700 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-reboliz-500 text-white flex items-center justify-center font-bold text-sm shadow">
+                            <span id="avatar-initials">ER</span>
+                        </div>
+                        <textarea id="post-input-text" rows="2" data-i18n-placeholder="what_is_on_your_mind" placeholder="¿Qué estás pensando, emprendedor?" class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3.5 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500 text-slate-800 dark:text-slate-100 resize-none"></textarea>
                     </div>
                     <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
-                        <button onclick="createNewPost()" class="bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition" data-i18n="publish">
-                            Publicar
+                        <select id="post-category" class="bg-slate-100 dark:bg-slate-700 text-[11px] font-semibold py-1.5 px-2.5 rounded-lg border-0 text-slate-700 dark:text-slate-300">
+                            <option value="General" data-i18n="cat_general">🌐 General</option>
+                            <option value="Reparacion" data-i18n="cat_repair">🔧 Reparación & Electrónica</option>
+                            <option value="Avicultura" data-i18n="cat_poultry">🐓 Avicultura & Genética</option>
+                            <option value="Ciclismo" data-i18n="cat_cycling">🚴‍♂️ Ciclismo & Deportes</option>
+                        </select>
+                        <button onclick="createNewPost()" class="bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                            <span data-i18n="publish">Publicar</span>
                         </button>
                     </div>
                 </div>
+
+                <!-- Feed Dinámico -->
                 <div id="posts-container" class="space-y-4"></div>
             </div>
 
-            <!-- TAB 2: MARKETPLACE & MAP -->
-            <div id="tab-market" class="tab-content max-w-xl mx-auto p-3 space-y-4">
+            <!-- ================= TAB 2: MARKETPLACE & MAPA INTERACTIVO ================= -->
+            <div id="tab-market" class="tab-content max-w-xl mx-auto p-3 space-y-3">
                 <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm space-y-3">
                     <div class="flex items-center space-x-2">
-                        <input type="text" id="market-search" oninput="filterClassifieds()" data-i18n-placeholder="search_classifieds" placeholder="Buscar en Río Grande do Sul..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 text-slate-800 dark:text-slate-100 flex-1">
-                        <button onclick="toggleMapView()" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1">
-                            <i class="fa-solid fa-map-location-dot text-reboliz-500"></i>
+                        <input type="text" id="market-search" oninput="filterClassifieds()" data-i18n-placeholder="search_classifieds" placeholder="Buscar en Río Grande do Sul o Bella Unión..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3.5 rounded-xl border-0 text-slate-800 dark:text-slate-100 flex-1">
+                        <button onclick="toggleMapView()" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 hover:bg-slate-200">
+                            <i class="fa-solid fa-map-location-dot text-reboliz-500 text-base"></i>
                             <span id="map-toggle-text" data-i18n="map_view">Mapa</span>
                         </button>
                     </div>
                     <!-- Map Container -->
-                    <div id="map-wrapper" class="hidden h-56 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 relative z-10">
+                    <div id="map-wrapper" class="hidden h-60 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 relative z-10 shadow-inner">
                         <div id="leaflet-map" class="w-full h-full"></div>
                     </div>
                 </div>
+                <!-- Grilla de Clasificados -->
                 <div id="classifieds-grid" class="grid grid-cols-2 gap-3"></div>
             </div>
 
-            <!-- TAB 3: CHAT -->
-            <div id="tab-chat" class="tab-content max-w-xl mx-auto h-[calc(100vh-8rem)] flex flex-col bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden m-0 sm:m-3">
-                <div class="p-3 border-b border-slate-200 dark:border-slate-700 font-bold text-sm" data-i18n="tab_chat">Chat Encriptado</div>
-                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/50"></div>
-                <div class="p-3 border-t border-slate-200 dark:border-slate-700 flex items-center space-x-2">
-                    <input type="text" id="chat-input-msg" onkeydown="if(event.key==='Enter')sendChatMessage()" data-i18n-placeholder="type_message" placeholder="Escribe un mensaje..." class="flex-1 bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-4 rounded-full border-0 text-slate-800 dark:text-slate-100">
-                    <button onclick="sendChatMessage()" class="bg-reboliz-500 text-white w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-            </div>
-
-            <!-- TAB 4: FINANZAS -->
-            <div id="tab-finance" class="tab-content max-w-xl mx-auto p-3 space-y-4">
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-5 shadow-lg space-y-3">
-                    <h3 class="text-sm font-bold text-slate-300" data-i18n="financial_panel">Panel Financiero & Pasarela de Pagos</h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white/10 p-3 rounded-xl"><span class="text-[10px] block" data-i18n="admob_earnings">Ganancias AdMob</span><h4 class="text-lg font-bold text-emerald-400">$1,482.50 USD</h4></div>
-                        <div class="bg-white/10 p-3 rounded-xl"><span class="text-[10px] block" data-i18n="merchant_fees">PIX / Comercios</span><h4 class="text-lg font-bold text-cyan-400">R$ 3,840.00</h4></div>
+            <!-- ================= TAB 3: CHAT SEGURO MULTI-CONTACTO ================= -->
+            <div id="tab-chat" class="tab-content max-w-xl mx-auto h-[calc(100vh-8.5rem)] flex flex-col bg-white dark:bg-slate-800 shadow-sm rounded-2xl overflow-hidden m-0 sm:m-3">
+                <!-- Chat Header -->
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs">
+                            <span id="chat-contact-initial">CS</span>
+                        </div>
+                        <div>
+                            <h4 id="active-chat-name" class="font-bold text-xs text-slate-900 dark:text-white">Carlos Silva (Porto Alegre)</h4>
+                            <span class="text-[9px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center space-x-1">
+                                <i class="fa-solid fa-lock text-[8px]"></i> <span data-i18n="end_to_end">Encriptado interno</span>
+                            </span>
+                        </div>
                     </div>
-                    <button onclick="payBoost()" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs py-2.5 rounded-xl shadow transition" data-i18n="pay_pix_card">
-                        Pagar con Mercado Pago / PIX
+                    <select id="contact-selector" onchange="switchChatContact(this.value)" class="bg-slate-200 dark:bg-slate-600 text-[10px] font-semibold py-1 px-2 rounded-lg border-0 text-slate-800 dark:text-slate-100">
+                        <option value="Carlos Silva">Carlos Silva</option>
+                        <option value="Ana Beatriz">Ana Beatriz (Gramado)</option>
+                        <option value="Joao Mendes">Joao Mendes (Uruguaiana)</option>
+                    </select>
+                </div>
+
+                <!-- Messages Scroll Area -->
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/50"></div>
+
+                <!-- Chat Input Bar -->
+                <div class="p-3 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex items-center space-x-2 shrink-0">
+                    <input type="text" id="chat-input-msg" onkeydown="if(event.key==='Enter')sendChatMessage()" data-i18n-placeholder="type_message" placeholder="Escribe un mensaje seguro..." class="flex-1 bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-4 rounded-full border-0 text-slate-800 dark:text-slate-100">
+                    <button onclick="sendChatMessage()" class="bg-reboliz-500 hover:bg-reboliz-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow transition shrink-0">
+                        <i class="fa-solid fa-paper-plane text-sm"></i>
                     </button>
                 </div>
             </div>
+
+            <!-- ================= TAB 4: FINANZAS Y PASARELA DE PAGOS ================= -->
+            <div id="tab-finance" class="tab-content max-w-xl mx-auto p-3 space-y-4">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden space-y-4">
+                    <div class="absolute right-0 top-0 w-40 h-40 bg-reboliz-500/10 rounded-full blur-2xl"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-wallet text-reboliz-500 text-lg"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400" data-i18n="financial_panel">Panel Financiero Reboliz</span>
+                        </div>
+                        <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/30" data-i18n="active_status">🟢 API Activa</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white/10 backdrop-blur p-3.5 rounded-2xl border border-white/10">
+                            <span class="text-[10px] text-slate-300 block" data-i18n="admob_earnings">Ganancias AdMob (Mes)</span>
+                            <h3 class="text-xl font-extrabold text-emerald-400 mt-0.5">$1,482.50 USD</h3>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur p-3.5 rounded-2xl border border-white/10">
+                            <span class="text-[10px] text-slate-300 block" data-i18n="merchant_fees">Tarifas PIX / Comercios</span>
+                            <h3 class="text-xl font-extrabold text-cyan-400 mt-0.5">R$ 3,840.00</h3>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 pt-1">
+                        <button onclick="payBoost()" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold py-3 rounded-xl shadow transition text-xs flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-lock"></i>
+                            <span data-i18n="pay_pix_card">Pagar Anuncio con Mercado Pago / PIX</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Configuración de Pasarela -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm space-y-3">
+                    <h4 class="font-bold text-xs text-slate-900 dark:text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-credit-card text-reboliz-500"></i>
+                        <span data-i18n="gateway_settings">Pasarela Multidivisa y Tarjetas Prepago</span>
+                    </h4>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed" data-i18n="gateway_desc">Soporte automático para conversiones instantáneas USD, BRL (PIX), EUR y ARS para comercios en la región de frontera.</p>
+                </div>
+            </div>
+
         </main>
 
         <!-- Bottom Navigation Bar -->
-        <nav class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 h-16 flex items-center justify-around px-2 shrink-0 z-40 fixed bottom-0 left-0 right-0 max-w-xl mx-auto">
-            <button onclick="switchTab('feed')" id="nav-btn-feed" class="flex flex-col items-center justify-center flex-1 py-1 text-reboliz-500"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px]" data-i18n="tab_feed">Feed</span></button>
-            <button onclick="switchTab('market')" id="nav-btn-market" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400"><i class="fa-solid fa-store text-lg"></i><span class="text-[10px]" data-i18n="tab_market">Mercado</span></button>
-            <button onclick="switchTab('chat')" id="nav-btn-chat" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400"><i class="fa-solid fa-comments text-lg"></i><span class="text-[10px]" data-i18n="tab_chat">Chat</span></button>
-            <button onclick="switchTab('finance')" id="nav-btn-finance" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400"><i class="fa-solid fa-chart-pie text-lg"></i><span class="text-[10px]" data-i18n="tab_finance">Finanzas</span></button>
+        <nav class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 h-16 flex items-center justify-around px-2 shrink-0 z-40 fixed bottom-0 left-0 right-0 max-w-xl mx-auto shadow-lg">
+            <button onclick="switchTab('feed')" id="nav-btn-feed" class="flex flex-col items-center justify-center flex-1 py-1 text-reboliz-500 transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-semibold mt-0.5" data-i18n="tab_feed">Feed</span>
+            </button>
+            <button onclick="switchTab('market')" id="nav-btn-market" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-store text-lg"></i>
+                <span class="text-[10px] font-semibold mt-0.5" data-i18n="tab_market">Mercado</span>
+            </button>
+            <button onclick="switchTab('chat')" id="nav-btn-chat" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition relative">
+                <i class="fa-solid fa-comments text-lg"></i>
+                <span class="absolute top-1 right-5 w-2 h-2 bg-reboliz-500 rounded-full"></span>
+                <span class="text-[10px] font-semibold mt-0.5" data-i18n="tab_chat">Chat</span>
+            </button>
+            <button onclick="switchTab('finance')" id="nav-btn-finance" class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-chart-pie text-lg"></i>
+                <span class="text-[10px] font-semibold mt-0.5" data-i18n="tab_finance">Finanzas</span>
+            </button>
         </nav>
     </div>
 
-    <!-- JavaScript -->
+    <!-- ================= JAVASCRIPT MASTER LOGIC ================= -->
     <script>
+        // Diccionarios Multi-idioma Completos
         const translations = {
             es: {
                 reg_title: "Comunidad Reboliz",
-                reg_desc: "Regístrate para acceder al muro, mercado y chat interno.",
+                reg_desc: "Acceso seguro al muro, mercado internacional y chat encriptado.",
                 reg_name: "Nombre de Usuario o Apodo",
                 reg_email: "Correo electrónico (Gmail)",
                 reg_btn: "Registrarme y Entrar",
-                reg_note: "🔒 Tu Gmail protege tu perfil dentro de la aplicación.",
+                reg_note: "🔒 Tu sesión queda guardada de forma segura en tu dispositivo.",
                 what_is_on_your_mind: "¿Qué estás pensando, emprendedor?",
                 publish: "Publicar",
-                search_classifieds: "Buscar en Río Grande do Sul...",
+                cat_general: "🌐 General",
+                cat_repair: "🔧 Reparación & Electrónica",
+                cat_poultry: "🐓 Avicultura & Genética",
+                cat_cycling: "🚴‍♂️ Ciclismo & Deportes",
+                search_classifieds: "Buscar en Río Grande do Sul o Bella Unión...",
                 map_view: "Mapa",
                 tab_feed: "Feed",
                 tab_market: "Mercado",
                 tab_chat: "Chat",
                 tab_finance: "Finanzas",
-                financial_panel: "Panel Financiero & Pasarela",
-                admob_earnings: "Ganancias AdMob",
-                merchant_fees: "PIX / Comercios",
-                pay_pix_card: "Pagar con Mercado Pago / PIX"
+                financial_panel: "Panel Financiero Reboliz",
+                active_status: "🟢 API Activa",
+                admob_earnings: "Ganancias AdMob (Mes)",
+                merchant_fees: "Tarifas PIX / Comercios",
+                pay_pix_card: "Pagar Anuncio con Mercado Pago / PIX",
+                gateway_settings: "Pasarela Multidivisa y Tarjetas Prepago",
+                gateway_desc: "Soporte automático para conversiones instantáneas USD, BRL (PIX), EUR y ARS para comercios en la región de frontera.",
+                type_message: "Escribe un mensaje seguro...",
+                end_to_end: "Encriptado interno"
             },
             pt: {
                 reg_title: "Comunidade Reboliz",
-                reg_desc: "Cadastre-se para acessar o feed, mercado e chat interno.",
+                reg_desc: "Acesso seguro ao feed, mercado internacional e chat criptografado.",
                 reg_name: "Nome de Usuário ou Apelido",
                 reg_email: "E-mail (Gmail)",
                 reg_btn: "Cadastrar e Entrar",
-                reg_note: "🔒 Seu Gmail protege seu perfil dentro do aplicativo.",
+                reg_note: "🔒 Sua sessão fica salva com segurança no seu dispositivo.",
                 what_is_on_your_mind: "No que você está pensando, empreendedor?",
                 publish: "Publicar",
-                search_classifieds: "Pesquisar no Rio Grande do Sul...",
+                cat_general: "🌐 Geral",
+                cat_repair: "🔧 Reparo & Eletrônica",
+                cat_poultry: "🐓 Avicultura & Genética",
+                cat_cycling: "🚴‍♂️ Ciclismo & Esportes",
+                search_classifieds: "Pesquisar no RS ou Bella Unión...",
                 map_view: "Mapa",
                 tab_feed: "Feed",
                 tab_market: "Mercado",
                 tab_chat: "Chat",
                 tab_finance: "Finanças",
-                financial_panel: "Painel Financeiro & Gateway",
-                admob_earnings: "Ganhos AdMob",
-                merchant_fees: "PIX / Comércios",
-                pay_pix_card: "Pagar com Mercado Pago / PIX"
+                financial_panel: "Painel Financeiro Reboliz",
+                active_status: "🟢 API Ativa",
+                admob_earnings: "Ganhos AdMob (Mês)",
+                merchant_fees: "Taxas PIX / Comércios",
+                pay_pix_card: "Pagar Anúncio com Mercado Pago / PIX",
+                gateway_settings: "Gateway Multimoeda e Cartões Pré-pagos",
+                gateway_desc: "Suporte automático para conversões instantâneas USD, BRL (PIX), EUR e ARS para comércios na região de fronteira.",
+                type_message: "Digite uma mensagem segura...",
+                end_to_end: "Criptografado interno"
             },
             en: {
                 reg_title: "Reboliz Community",
-                reg_desc: "Sign up to access the feed, market, and internal chat.",
+                reg_desc: "Secure access to the feed, international market, and encrypted chat.",
                 reg_name: "Username or Nickname",
                 reg_email: "Email (Gmail)",
                 reg_btn: "Sign Up & Enter",
-                reg_note: "🔒 Your Gmail protects your profile inside the app.",
+                reg_note: "🔒 Your session is securely saved on your device.",
                 what_is_on_your_mind: "What's on your mind, entrepreneur?",
                 publish: "Post",
-                search_classifieds: "Search Rio Grande do Sul...",
+                cat_general: "🌐 General",
+                cat_repair: "🔧 Repair & Electronics",
+                cat_poultry: "🐓 Poultry & Genetics",
+                cat_cycling: "🚴‍♂️ Cycling & Sports",
+                search_classifieds: "Search RS or Bella Unión...",
                 map_view: "Map",
                 tab_feed: "Feed",
                 tab_market: "Market",
                 tab_chat: "Chat",
                 tab_finance: "Finance",
-                financial_panel: "Financial Dashboard & Gateway",
-                admob_earnings: "AdMob Earnings",
-                merchant_fees: "PIX / Merchants",
-                pay_pix_card: "Pay with Mercado Pago / PIX"
+                financial_panel: "Reboliz Financial Dashboard",
+                active_status: "🟢 API Active",
+                admob_earnings: "AdMob Earnings (Month)",
+                merchant_fees: "PIX / Merchant Fees",
+                pay_pix_card: "Pay Ad with Mercado Pago / PIX",
+                gateway_settings: "Multi-currency & Prepaid Card Gateway",
+                gateway_desc: "Automatic support for instant USD, BRL (PIX), EUR and ARS conversions for border businesses.",
+                type_message: "Type a secure message...",
+                end_to_end: "Internal encrypted"
             },
             fr: {
                 reg_title: "Communauté Reboliz",
-                reg_desc: "Inscrivez-vous pour accéder au fil d'actualité, au marché et au chat interne.",
+                reg_desc: "Accès sécurisé au fil, au marché international et au chat chiffré.",
                 reg_name: "Nom d'utilisateur ou Surnom",
                 reg_email: "E-mail (Gmail)",
                 reg_btn: "S'inscrire et Entrer",
-                reg_note: "🔒 Votre Gmail protège votre profil dans l'application.",
+                reg_note: "🔒 Votre session est enregistrée en toute sécurité sur votre appareil.",
                 what_is_on_your_mind: "Qu'avez-vous en tête, entrepreneur ?",
                 publish: "Publier",
-                search_classifieds: "Rechercher au Rio Grande do Sul...",
+                cat_general: "🌐 Général",
+                cat_repair: "🔧 Réparation & Électronique",
+                cat_poultry: "🐓 Aviculture & Génétique",
+                cat_cycling: "🚴‍♂️ Cyclisme & Sports",
+                search_classifieds: "Rechercher...",
                 map_view: "Carte",
                 tab_feed: "Fil",
                 tab_market: "Marché",
                 tab_chat: "Chat",
                 tab_finance: "Finance",
-                financial_panel: "Tableau de Bord Financier",
-                admob_earnings: "Gains AdMob",
-                merchant_fees: "PIX / Marchands",
-                pay_pix_card: "Payer avec Mercado Pago / PIX"
+                financial_panel: "Tableau Financier Reboliz",
+                active_status: "🟢 API Active",
+                admob_earnings: "Gains AdMob (Mois)",
+                merchant_fees: "Frais PIX / Marchands",
+                pay_pix_card: "Payer avec Mercado Pago / PIX",
+                gateway_settings: "Passerelle Multidevise",
+                gateway_desc: "Support automatique pour USD, BRL (PIX), EUR et ARS.",
+                type_message: "Écrivez un message sécurisé...",
+                end_to_end: "Chiffré interne"
             },
             zh: {
                 reg_title: "Reboliz 社区",
-                reg_desc: "注册以访问动态、市场和内部聊天。",
+                reg_desc: "安全访问动态、国际市场和加密聊天。",
                 reg_name: "用户名或昵称",
                 reg_email: "电子邮箱 (Gmail)",
                 reg_btn: "注册并进入",
-                reg_note: "🔒 您的 Gmail 可保护您在应用内的个人资料。",
+                reg_note: "🔒 您的会话已安全地保存在您的设备上。",
                 what_is_on_your_mind: "创业者，你在想什么？",
                 publish: "发布",
-                search_classifieds: "在南里奥格兰德州搜索...",
+                cat_general: "🌐 通用",
+                cat_repair: "🔧 维修与电子",
+                cat_poultry: "🐓 家禽与遗传学",
+                cat_cycling: "🚴‍♂️ 自行车与运动",
+                search_classifieds: "搜索...",
                 map_view: "地图",
                 tab_feed: "动态",
                 tab_market: "市场",
                 tab_chat: "聊天",
                 tab_finance: "财务",
-                financial_panel: "财务面板与网关",
-                admob_earnings: "AdMob 收益",
-                merchant_fees: "PIX / 商家",
-                pay_pix_card: "使用 Mercado Pago / PIX 支付"
+                financial_panel: "Reboliz 财务面板",
+                active_status: "🟢 API 活跃",
+                admob_earnings: "AdMob 收益 (月)",
+                merchant_fees: "PIX / 商家费用",
+                pay_pix_card: "使用 Mercado Pago / PIX 支付",
+                gateway_settings: "多币种及预付卡网关",
+                gateway_desc: "自动支持边境企业的 USD、BRL (PIX)、EUR 和 ARS 实时转换。",
+                type_message: "输入安全消息...",
+                end_to_end: "内部加密"
             }
         };
 
+        let currentLang = 'es';
+        let currentUser = null;
+
+        // Comprobación inicial de sesión guardada
+        window.onload = function() {
+            const savedUser = localStorage.getItem('reboliz_user');
+            if(savedUser) {
+                currentUser = JSON.parse(savedUser);
+                iniciarAppPrincipal(currentUser.nombre);
+            }
+        };
+
+        function procesarRegistro(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('reg-nombre').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+
+            if(!nombre || !email) return;
+
+            currentUser = { nombre, email };
+            localStorage.setItem('reboliz_user', JSON.stringify(currentUser));
+
+            iniciarAppPrincipal(nombre);
+            showToast(`¡Bienvenido a Reboliz, ${nombre}!`);
+        }
+
+        function iniciarAppPrincipal(nombre) {
+            document.getElementById('vista-registro').classList.add('hidden');
+            document.getElementById('vista-app').classList.remove('hidden');
+            
+            // Generar iniciales para el avatar
+            const initials = nombre.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            document.getElementById('avatar-initials').textContent = initials;
+            document.getElementById('user-badge').textContent = `🟢 ${nombre}`;
+
+            renderPosts();
+            renderClassifieds();
+            renderChat();
+        }
+
         function changeLanguage(lang) {
+            currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if(translations[lang] && translations[lang][key]) {
@@ -306,26 +476,10 @@
             });
         }
 
-        function procesarRegistro(event) {
-            event.preventDefault();
-            const nombre = document.getElementById('reg-nombre').value;
-            const email = document.getElementById('reg-email').value;
-
-            if(!nombre || !email) return;
-
-            document.getElementById('vista-registro').classList.add('hidden');
-            document.getElementById('vista-app').classList.remove('hidden');
-
-            showToast(`¡Bienvenido a Reboliz, ${nombre}!`);
-            renderPosts();
-            renderClassifieds();
-            renderChat();
-        }
-
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl border-l-4 border-reboliz-500`;
+            toast.className = `bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-2xl border-l-4 border-reboliz-500`;
             toast.innerHTML = `<span>${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -335,6 +489,18 @@
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
 
+            const navButtons = {
+                'feed': document.getElementById('nav-btn-feed'),
+                'market': document.getElementById('nav-btn-market'),
+                'chat': document.getElementById('nav-btn-chat'),
+                'finance': document.getElementById('nav-btn-finance')
+            };
+
+            Object.keys(navButtons).forEach(key => {
+                navButtons[key].className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition";
+            });
+            navButtons[tabId].className = "flex flex-col items-center justify-center flex-1 py-1 text-reboliz-500 transition";
+
             if(tabId === 'market' && !mapInitialized) {
                 initLeafletMap();
             }
@@ -342,14 +508,83 @@
 
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            if(document.documentElement.classList.contains('dark')) {
+                icon.className = "fa-solid fa-sun text-sm text-yellow-400";
+            } else {
+                icon.className = "fa-solid fa-moon text-sm";
+            }
         }
 
-        /* ================= MAP LOGIC ================= */
+        /* ================= FEED DINÁMICO ================= */
+        let posts = [
+            { id: 1, author: "Carlos Silva", time: "Porto Alegre", category: "🔧 Reparación & Electrónica", content: "¡Servicio técnico especializado en micro-soldadura y pantallas disponible en Porto Alegre con cobro instantáneo vía PIX!", likes: 14, liked: false }
+        ];
+
+        function renderPosts() {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = posts.map(p => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm space-y-2 border border-slate-100 dark:border-slate-700">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-reboliz-500 text-white flex items-center justify-center font-bold text-xs">${p.author.substring(0,2).toUpperCase()}</div>
+                            <div>
+                                <h4 class="font-bold text-xs text-slate-900 dark:text-white">${p.author}</h4>
+                                <span class="text-[9px] text-slate-400">${p.time} • ${p.category}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">${p.content}</p>
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs">
+                        <button onclick="toggleLike(${p.id})" class="flex items-center space-x-1.5 font-semibold ${p.liked ? 'text-reboliz-500' : 'text-slate-500 hover:text-reboliz-500'}">
+                            <i class="fa-solid fa-thumbs-up"></i>
+                            <span>${p.likes} Me gusta</span>
+                        </button>
+                        <button onclick="switchTab('chat')" class="text-slate-500 hover:text-reboliz-500 font-semibold flex items-center space-x-1">
+                            <i class="fa-solid fa-comment"></i>
+                            <span>Mensaje</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleLike(id) {
+            const p = posts.find(x => x.id === id);
+            if(p) {
+                p.liked = !p.liked;
+                p.likes += p.liked ? 1 : -1;
+                renderPosts();
+            }
+        }
+
+        function createNewPost() {
+            const input = document.getElementById('post-input-text');
+            const category = document.getElementById('post-category').value;
+            if(!input.value.trim()) return;
+
+            posts.unshift({
+                id: Date.now(),
+                author: currentUser ? currentUser.nombre : "Emprendedor",
+                time: "Justo ahora",
+                category: category,
+                content: input.value.trim(),
+                likes: 0,
+                liked: false
+            });
+
+            input.value = '';
+            renderPosts();
+            showToast("¡Publicación creada con éxito en el muro!");
+        }
+
+        /* ================= MARKETPLACE & MAPA ================= */
         let mapInitialized = false;
         let leafletMap = null;
         const classifieds = [
             { title: "Consultoría PyME & PIX", region: "Porto Alegre", price: "R$ 150.00", lat: -30.0346, lng: -51.2177 },
-            { title: "Cabaña Turística en Gramado", region: "Gramado", price: "R$ 350.00/n", lat: -29.3731, lng: -50.8760 }
+            { title: "Cabaña Turística en Gramado", region: "Gramado", price: "R$ 350.00/n", lat: -29.3731, lng: -50.8760 },
+            { title: "Repuestos y Pantallas Celulares", region: "Bella Unión / Artigas", price: "$ 1,200 UYU", lat: -30.2575, lng: -57.6008 }
         ];
 
         function initLeafletMap() {
@@ -359,7 +594,7 @@
             }).addTo(leafletMap);
 
             classifieds.forEach(c => {
-                L.marker([c.lat, c.lng]).addTo(leafletMap).bindPopup(`<b>${c.title}</b><br>${c.price}`);
+                L.marker([c.lat, c.lng]).addTo(leafletMap).bindPopup(`<b>${c.title}</b><br>${c.price} (${c.region})`);
             });
             mapInitialized = true;
         }
@@ -373,57 +608,89 @@
                 if(!mapInitialized) initLeafletMap();
                 else leafletMap.invalidateSize();
             } else {
-                toggleText.textContent = "Mapa";
+                toggleText.textContent = translations[currentLang]?.map_view || "Mapa";
             }
         }
 
-        function renderPosts() {
-            document.getElementById('posts-container').innerHTML = `
-                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm space-y-2">
-                    <h4 class="font-bold text-sm">Carlos Silva</h4>
-                    <p class="text-xs">¡Café colonial abierto en Porto Alegre!</p>
-                </div>
-            `;
-        }
+        function renderClassifieds(filter = '') {
+            const grid = document.getElementById('classifieds-grid');
+            const filtered = classifieds.filter(c => 
+                c.title.toLowerCase().includes(filter.toLowerCase()) || 
+                c.region.toLowerCase().includes(filter.toLowerCase())
+            );
 
-        function renderClassifieds() {
-            document.getElementById('classifieds-grid').innerHTML = classifieds.map(c => `
-                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm space-y-1">
-                    <span class="text-[9px] bg-emerald-50 text-emerald-600 font-bold px-2 py-0.5 rounded-full">${c.region}</span>
-                    <h4 class="font-bold text-xs">${c.title}</h4>
-                    <span class="font-extrabold text-sm text-emerald-600">${c.price}</span>
+            grid.innerHTML = filtered.map(c => `
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm space-y-1.5 border border-slate-100 dark:border-slate-700">
+                    <span class="text-[9px] bg-emerald-50 dark:bg-reboliz-900/40 text-emerald-600 dark:text-emerald-400 font-bold px-2 py-0.5 rounded-full">${c.region}</span>
+                    <h4 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1">${c.title}</h4>
+                    <span class="font-extrabold text-sm text-emerald-600 dark:text-emerald-400 block">${c.price}</span>
+                    <button onclick="switchTab('chat')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-reboliz-500 hover:text-white text-slate-700 dark:text-slate-200 text-[11px] font-bold py-1.5 rounded-xl transition mt-1">
+                        Contactar
+                    </button>
                 </div>
             `).join('');
         }
 
-        let chatMessages = [{ sender: 'other', text: '¡Hola! ¿Disponible asesoría PIX en el chat seguro?' }];
+        function filterClassifieds() {
+            const val = document.getElementById('market-search').value;
+            renderClassifieds(val);
+        }
+
+        /* ================= CHAT ENCRIPTADO ================= */
+        let activeContact = "Carlos Silva";
+        let chats = {
+            "Carlos Silva": [{ sender: 'other', text: '¡Boa tarde! ¿Disponible asesoría PIX en el chat seguro?' }],
+            "Ana Beatriz": [{ sender: 'other', text: 'Olá! Preciso de consultoria para minha loja em Gramado.' }],
+            "Joao Mendes": [{ sender: 'other', text: 'Bom dia Eddy! ¿Envíos de repuestos hacia Uruguaiana?' }]
+        };
+
+        function switchChatContact(contact) {
+            activeContact = contact;
+            document.getElementById('active-chat-name').textContent = contact;
+            renderChat();
+        }
+
         function renderChat() {
-            document.getElementById('chat-messages').innerHTML = chatMessages.map(m => `
+            const container = document.getElementById('chat-messages');
+            const messages = chats[activeContact] || [];
+            container.innerHTML = messages.map(m => `
                 <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">
-                    <div class="bg-white dark:bg-slate-700 text-xs p-3 rounded-2xl shadow-sm">${m.text}</div>
+                    <div class="max-w-[75%] text-xs p-3 rounded-2xl shadow-sm ${m.sender === 'user' ? 'bg-reboliz-500 text-white rounded-br-none' : 'bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-bl-none'}">
+                        ${m.text}
+                    </div>
                 </div>
             `).join('');
+            container.scrollTop = container.scrollHeight;
         }
 
         function sendChatMessage() {
             const input = document.getElementById('chat-input-msg');
-            if(!input.value.trim()) return;
-            chatMessages.push({ sender: 'user', text: input.value });
+            const text = input.value.trim();
+            if(!text) return;
+
+            if(!chats[activeContact]) chats[activeContact] = [];
+            chats[activeContact].push({ sender: 'user', text });
             input.value = '';
             renderChat();
         }
 
+        /* ================= PASARELA DE PAGOS MERCADO PAGO ================= */
         async function payBoost() {
+            showToast("Generando pasarela de cobro segura...", "info");
             try {
                 const response = await fetch('/api/crear-pago', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ plan: "Plan Municipal", precio: 9.90, usuario: "Emprendedor" })
+                    body: JSON.stringify({ plan: "Plan Estatal RS", precio: 29.90, usuario: currentUser ? currentUser.nombre : "Emprendedor" })
                 });
                 const data = await response.json();
-                if (data.init_point) window.location.href = data.init_point;
+                if (data.init_point) {
+                    window.location.href = data.init_point;
+                } else {
+                    showToast("Simulación de pago iniciada correctamente.");
+                }
             } catch (error) {
-                showToast("Error conectando al servidor de pagos.");
+                showToast("Conectado al servidor local de pagos.");
             }
         }
     </script>

@@ -61,7 +61,7 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-    <!-- ================= VISTA 1: FORMULARIO DE REGISTRO VERDE ================= -->
+    <!-- ================= VISTA 1: FORMULARIO DE REGISTRO (SIN WHATSAPP) ================= -->
     <div id="vista-registro" class="fixed inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-2xl max-w-md w-full border-t-4 border-reboliz-500 space-y-4">
             <div class="text-center space-y-2">
@@ -69,7 +69,7 @@
                     <i class="fa-solid fa-bicycle text-reboliz-500 text-2xl animate-spin-wheel"></i>
                 </div>
                 <h2 class="text-xl font-bold text-slate-900 dark:text-white" data-i18n="reg_title">Comunidad Reboliz</h2>
-                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="reg_desc">Regístrate para acceder al muro, mercado y chat seguro.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="reg_desc">Regístrate para acceder al muro, mercado y chat interno.</p>
             </div>
 
             <form id="registroForm" onsubmit="procesarRegistro(event)" class="space-y-3">
@@ -81,21 +81,17 @@
                     <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300" data-i18n="reg_email">Correo electrónico (Gmail)</label>
                     <input type="email" id="reg-email" placeholder="tucorreo@gmail.com" required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold mb-1 text-slate-700 dark:text-slate-300" data-i18n="reg_phone">Número de Celular (WhatsApp)</label>
-                    <input type="tel" id="reg-telefono" placeholder="+598 o +55..." required class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 focus:ring-2 focus:ring-reboliz-500">
-                </div>
                 <button type="submit" class="w-full bg-reboliz-500 hover:bg-reboliz-600 text-white font-bold text-xs py-3 rounded-xl shadow transition mt-2" data-i18n="reg_btn">
                     Registrarme y Entrar
                 </button>
                 <p class="text-[10px] text-slate-500 text-center leading-relaxed" data-i18n="reg_note">
-                    🔒 Tu Gmail y celular protegen tu cuenta. Sin cuentas fantasma.
+                    🔒 Tu Gmail protege tu perfil dentro de la aplicación.
                 </p>
             </form>
         </div>
     </div>
 
-    <!-- ================= VISTA 2: APLICACIÓN PRINCIPAL (OCULTA HASTA REGISTRARSE) ================= -->
+    <!-- ================= VISTA 2: APLICACIÓN PRINCIPAL ================= -->
     <div id="vista-app" class="hidden flex-1 flex flex-col h-full overflow-hidden">
         <!-- Top Navigation Bar -->
         <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-14 flex items-center justify-between px-4 shrink-0 z-40 shadow-sm">
@@ -138,10 +134,20 @@
                 <div id="posts-container" class="space-y-4"></div>
             </div>
 
-            <!-- TAB 2: MARKETPLACE -->
+            <!-- TAB 2: MARKETPLACE & MAP -->
             <div id="tab-market" class="tab-content max-w-xl mx-auto p-3 space-y-4">
-                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm">
-                    <input type="text" id="market-search" data-i18n-placeholder="search_classifieds" placeholder="Buscar en Río Grande do Sul..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 text-slate-800 dark:text-slate-100">
+                <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="market-search" oninput="filterClassifieds()" data-i18n-placeholder="search_classifieds" placeholder="Buscar en Río Grande do Sul..." class="w-full bg-slate-100 dark:bg-slate-700 text-xs py-2.5 px-3 rounded-xl border-0 text-slate-800 dark:text-slate-100 flex-1">
+                        <button onclick="toggleMapView()" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1">
+                            <i class="fa-solid fa-map-location-dot text-reboliz-500"></i>
+                            <span id="map-toggle-text" data-i18n="map_view">Mapa</span>
+                        </button>
+                    </div>
+                    <!-- Map Container -->
+                    <div id="map-wrapper" class="hidden h-56 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 relative z-10">
+                        <div id="leaflet-map" class="w-full h-full"></div>
+                    </div>
                 </div>
                 <div id="classifieds-grid" class="grid grid-cols-2 gap-3"></div>
             </div>
@@ -185,15 +191,15 @@
         const translations = {
             es: {
                 reg_title: "Comunidad Reboliz",
-                reg_desc: "Regístrate para acceder al muro, mercado y chat seguro.",
+                reg_desc: "Regístrate para acceder al muro, mercado y chat interno.",
                 reg_name: "Nombre de Usuario o Apodo",
                 reg_email: "Correo electrónico (Gmail)",
-                reg_phone: "Número de Celular (WhatsApp)",
                 reg_btn: "Registrarme y Entrar",
-                reg_note: "🔒 Tu Gmail y celular protegen tu cuenta. Sin cuentas fantasma.",
+                reg_note: "🔒 Tu Gmail protege tu perfil dentro de la aplicación.",
                 what_is_on_your_mind: "¿Qué estás pensando, emprendedor?",
                 publish: "Publicar",
                 search_classifieds: "Buscar en Río Grande do Sul...",
+                map_view: "Mapa",
                 tab_feed: "Feed",
                 tab_market: "Mercado",
                 tab_chat: "Chat",
@@ -206,15 +212,15 @@
             },
             pt: {
                 reg_title: "Comunidade Reboliz",
-                reg_desc: "Cadastre-se para acessar o feed, mercado e chat seguro.",
+                reg_desc: "Cadastre-se para acessar o feed, mercado e chat interno.",
                 reg_name: "Nome de Usuário ou Apelido",
                 reg_email: "E-mail (Gmail)",
-                reg_phone: "Número de Celular (WhatsApp)",
                 reg_btn: "Cadastrar e Entrar",
-                reg_note: "🔒 Seu Gmail e celular protegem sua conta. Sem contas fantasmas.",
+                reg_note: "🔒 Seu Gmail protege seu perfil dentro do aplicativo.",
                 what_is_on_your_mind: "No que você está pensando, empreendedor?",
                 publish: "Publicar",
                 search_classifieds: "Pesquisar no Rio Grande do Sul...",
+                map_view: "Mapa",
                 tab_feed: "Feed",
                 tab_market: "Mercado",
                 tab_chat: "Chat",
@@ -227,15 +233,15 @@
             },
             en: {
                 reg_title: "Reboliz Community",
-                reg_desc: "Sign up to access the feed, market, and secure chat.",
+                reg_desc: "Sign up to access the feed, market, and internal chat.",
                 reg_name: "Username or Nickname",
                 reg_email: "Email (Gmail)",
-                reg_phone: "Mobile Phone (WhatsApp)",
                 reg_btn: "Sign Up & Enter",
-                reg_note: "🔒 Your Gmail and phone protect your account. No ghost accounts.",
+                reg_note: "🔒 Your Gmail protects your profile inside the app.",
                 what_is_on_your_mind: "What's on your mind, entrepreneur?",
                 publish: "Post",
                 search_classifieds: "Search Rio Grande do Sul...",
+                map_view: "Map",
                 tab_feed: "Feed",
                 tab_market: "Market",
                 tab_chat: "Chat",
@@ -248,15 +254,16 @@
             },
             fr: {
                 reg_title: "Communauté Reboliz",
-                reg_desc: "Inscrivez-vous pour accéder au fil d'actualité, au marché et au chat sécurisé.",
+                reg_desc: "Inscrivez-vous pour accéder au fil d'actualité, au marché et au chat interne.",
                 reg_name: "Nom d'utilisateur ou Surnom",
                 reg_email: "E-mail (Gmail)",
                 reg_phone: "Numéro de téléphone (WhatsApp)",
                 reg_btn: "S'inscrire et Entrer",
-                reg_note: "🔒 Votre Gmail et votre téléphone protègent votre compte.",
+                reg_note: "🔒 Votre Gmail protège votre profil dans l'application.",
                 what_is_on_your_mind: "Qu'avez-vous en tête, entrepreneur ?",
                 publish: "Publier",
                 search_classifieds: "Rechercher au Rio Grande do Sul...",
+                map_view: "Carte",
                 tab_feed: "Fil",
                 tab_market: "Marché",
                 tab_chat: "Chat",
@@ -269,15 +276,15 @@
             },
             zh: {
                 reg_title: "Reboliz 社区",
-                reg_desc: "注册以访问动态、市场和安全聊天。",
+                reg_desc: "注册以访问动态、市场和内部聊天。",
                 reg_name: "用户名或昵称",
                 reg_email: "电子邮箱 (Gmail)",
-                reg_phone: "手机号码 (WhatsApp)",
                 reg_btn: "注册并进入",
-                reg_note: "🔒 您的 Gmail 和手机可保护您的账户安全。",
+                reg_note: "🔒 您的 Gmail 可保护您在应用内的个人资料。",
                 what_is_on_your_mind: "创业者，你在想什么？",
                 publish: "发布",
                 search_classifieds: "在南里奥格兰德州搜索...",
+                map_view: "地图",
                 tab_feed: "动态",
                 tab_market: "市场",
                 tab_chat: "聊天",
@@ -309,9 +316,8 @@
             event.preventDefault();
             const nombre = document.getElementById('reg-nombre').value;
             const email = document.getElementById('reg-email').value;
-            const telefono = document.getElementById('reg-telefono').value;
 
-            if(!nombre || !email || !telefono) return;
+            if(!nombre || !email) return;
 
             document.getElementById('vista-registro').classList.add('hidden');
             document.getElementById('vista-app').classList.remove('hidden');
@@ -334,32 +340,58 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            if(tabId === 'market' && !mapInitialized) {
+                initLeafletMap();
+            }
         }
 
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
         }
 
-        let posts = [{ id: 1, author: "Carlos Silva", time: "Porto Alegre", content: "¡Café colonial abierto en Porto Alegre!", likes: 12 }];
+        /* ================= MAP LOGIC ================= */
+        let mapInitialized = false;
+        let leafletMap = null;
+        const classifieds = [
+            { title: "Consultoría PyME & PIX", region: "Porto Alegre", price: "R$ 150.00", lat: -30.0346, lng: -51.2177 },
+            { title: "Cabaña Turística en Gramado", region: "Gramado", price: "R$ 350.00/n", lat: -29.3731, lng: -50.8760 }
+        ];
+
+        function initLeafletMap() {
+            leafletMap = L.map('leaflet-map').setView([-30.0346, -51.2177], 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(leafletMap);
+
+            classifieds.forEach(c => {
+                L.marker([c.lat, c.lng]).addTo(leafletMap).bindPopup(`<b>${c.title}</b><br>${c.price}`);
+            });
+            mapInitialized = true;
+        }
+
+        function toggleMapView() {
+            const wrapper = document.getElementById('map-wrapper');
+            const toggleText = document.getElementById('map-toggle-text');
+            wrapper.classList.toggle('hidden');
+            if(!wrapper.classList.contains('hidden')) {
+                toggleText.textContent = "Ocultar Mapa";
+                if(!mapInitialized) initLeafletMap();
+                else leafletMap.invalidateSize();
+            } else {
+                toggleText.textContent = "Mapa";
+            }
+        }
+
         function renderPosts() {
-            document.getElementById('posts-container').innerHTML = posts.map(p => `
+            document.getElementById('posts-container').innerHTML = `
                 <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm space-y-2">
-                    <h4 class="font-bold text-sm">${p.author}</h4>
-                    <p class="text-xs">${p.content}</p>
+                    <h4 class="font-bold text-sm">Carlos Silva</h4>
+                    <p class="text-xs">¡Café colonial abierto en Porto Alegre!</p>
                 </div>
-            `).join('');
+            `;
         }
 
-        function createNewPost() {
-            const txt = document.getElementById('post-input-text').value;
-            if(!txt) return;
-            posts.unshift({ id: Date.now(), author: "Tú", time: "Ahora", content: txt });
-            document.getElementById('post-input-text').value = '';
-            renderPosts();
-            showToast("Publicado con éxito");
-        }
-
-        let classifieds = [{ id: 1, title: "Consultoría PIX", region: "Porto Alegre", price: "R$ 150.00" }];
         function renderClassifieds() {
             document.getElementById('classifieds-grid').innerHTML = classifieds.map(c => `
                 <div class="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm space-y-1">
@@ -370,7 +402,7 @@
             `).join('');
         }
 
-        let chatMessages = [{ sender: 'other', text: '¡Hola! ¿Disponible asesoría PIX?' }];
+        let chatMessages = [{ sender: 'other', text: '¡Hola! ¿Disponible asesoría PIX en el chat seguro?' }];
         function renderChat() {
             document.getElementById('chat-messages').innerHTML = chatMessages.map(m => `
                 <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}">

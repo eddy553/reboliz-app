@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reboliz - Comunidad y Conexión</title>
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #e8f5e9;
+            --accent-green: #4caf50;
+            --dark-color: #1b5e20;
+            --bg-color: #f4f9f4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Ícono de la rueda / bicicleta verde estilizada */
+        .bike-logo {
+            font-size: 28px;
+            background: white;
+            color: var(--primary-green);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(46, 125, 50, 0.1);
+            width: 100%;
+            max-width: 420px;
+            border-top: 5px solid var(--accent-green);
+        }
+
+        .card h2 {
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c8e6c9;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-color);
+        }
+
+        .security-note {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #e8f5e9;
+            color: var(--dark-color);
+            font-size: 13px;
+            border-top: 1px solid #c8e6c9;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="bike-logo">🚴‍♂️</div>
+        <h1>Comunidad Reboliz</h1>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Crear Cuenta Reboliz</h2>
+            <form id="registroForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre de Usuario o Apodo</label>
+                    <input type="text" id="nombre" placeholder="Ej. Eddy" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo electrónico (Gmail Obligatorio)</label>
+                    <input type="email" id="email" placeholder="tucorreo@gmail.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Número de Celular (Obligatorio para WhatsApp)</label>
+                    <input type="tel" id="telefono" placeholder="+598 o +55..." required>
+                </div>
+
+                <button type="submit" class="btn">Registrarme en Reboliz</button>
+
+                <div class="security-note">
+                    🔒 <strong>Seguridad activa:</strong> Tu Gmail y tu celular se combinan para proteger tu cuenta. Si pierdes uno, podrás recuperarla con el otro. Sin cuentas fantasma.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Red Reboliz - Espacio Seguro y Conectado</p>
+    </footer>
+
+</body>
+</html>

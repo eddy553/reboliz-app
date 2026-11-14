@@ -1,0 +1,2 @@
+// Esto le dice a tu servidor que sirva los archivos de la carpeta 'mundo' bajo la ruta /mundo
+app.use('/mundo', express.static(path.join(__dirname, 'mundo')));

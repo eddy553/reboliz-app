@@ -9,6 +9,11 @@ app.use(express.json());
 
 app.use(express.static(__dirname));
 
+// ESTA ES LA LÍNEA NUEVA QUE ABRE TU FRONTEND DIRECTO
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
 const client = new MercadoPagoConfig({ 
     accessToken: process.env.MP_ACCESS_TOKEN || 'TU_ACCESS_TOKEN_DE_MERCADO_PAGO' 
 });
